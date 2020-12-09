@@ -20,23 +20,19 @@ const state = {
 io.on('connection', (client) => {
   state.numOnlineUsers++;
   io.emit('stateUpdate', state);
-  console.log('A user connected:', state.numOnlineUsers);
 
   client.on('laugh', () => {
     state.laughCount++;
     io.emit('stateUpdate', state);
-    console.log('Laugh received:', state.laughCount);
 
     setTimeout(() => {
       state.laughCount--;
       io.emit('stateUpdate', state);
-      console.log('Laugh timed out:', state.laughCount);
     }, 5000);
   });
 
   client.on('disconnect', () => {
     state.numOnlineUsers--;
     io.emit('stateUpdate', state);
-    console.log('A user disconnected:', state.numOnlineUsers);
   });
 });
