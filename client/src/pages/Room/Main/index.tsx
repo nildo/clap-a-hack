@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Typography } from 'antd';
 import Flex from '../../../components/Flex';
-import Reactions from '../Reactions';
+import ReactionSummary from '../ReactionSummary';
 import Presentation from '../Presentation';
 import ReactionBar from '../ReactionBar';
 import OnlineList from '../OnlineList';
@@ -18,12 +18,14 @@ const Wrapper = styled.div`
 
 export default function Main() {
     const { roomid } = useParams<{roomid: string}>()
+    const presentationId = 1; // TODO mock
+
     return (
         <Wrapper>
             <Text>Room ID:</Text>
             <Flex row style={{ justifyContent: "space-between" }}>
                 <Title level={3}>{roomid}</Title>
-                <Reactions />
+                <ReactionSummary presentationId={presentationId} />
             </Flex>
             <Presentation />
             <ReactionBar />

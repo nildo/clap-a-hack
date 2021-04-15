@@ -1,20 +1,56 @@
 [
     {
+        "id": 1,
         "title": "National and culture days calendar/website/app",
-        "reactions": [
-            { "clap": 10, "laugh": 1, "boo": 0}
+        "reactions":  [
+            {
+                "id":"clap",
+                "number": 10 
+            },
+            {
+                "id": "laugh",
+                "number": 1
+            }, 
+            {
+                "id": "boo",
+                "number": 0
+            }
         ]
     },
     {
+        "id": 2,
         "title": "Awesome Bot",
         "reactions": [
-            { "clap": 12, "laugh": 398, "boo": 0 }
+            {
+                "id":"clap",
+                "number": 12
+            },
+            {
+                "id": "laugh",
+                "number": 379
+            }, 
+            {
+                "id": "boo",
+                "number": 0
+            }
         ]
     },
     {
+        "id": 3,
         "title": "This hackaton was just a distraction while reptilians take over the world",
         "reactions": [
-            { "clap": 0, "laugh": 0, "boo": 4738293}
+            {
+                "id":"clap",
+                "number": 0
+            },
+            {
+                "id": "laugh",
+                "number": 0
+            }, 
+            {
+                "id": "boo",
+                "number": 738648239
+            }
         ]
     }
 ]

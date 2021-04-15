@@ -1,14 +1,14 @@
 [
     {
         "emoji": "👏",
-        "action": "clap"
+        "id": "clap"
     },
     {
         "emoji": "😂",
-        "action": "laugh"
+        "id": "laugh"
     },
     {
         "emoji": "🍅",
-        "action": "boo"
+        "id": "boo"
     }
 ]

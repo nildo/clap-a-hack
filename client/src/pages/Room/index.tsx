@@ -14,7 +14,11 @@ export default function Room() {
     
     return (
         <Wrapper>
-            <SplitterLayout secondaryMinSize={340} secondaryInitialSize={340} >
+            <SplitterLayout 
+                percentage
+                primaryMinSize={70}
+                secondaryInitialSize={20} 
+            >
                 <Main />    
                 <Sidebar />
             </SplitterLayout>

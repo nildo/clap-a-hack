@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Typography, Tooltip } from 'antd';
+import Flex from '../../../components/Flex';
+import ReactionSummary from '../ReactionSummary';
 
 // TODO this is just a mock
 import presentations from '../../../mock/presentations.json';
@@ -47,6 +49,7 @@ const Presentation = styled.div.attrs(({ active } : { active: boolean }) => {
     padding: 12px;
     border-radius: 12px;
     margin: 8px 0;
+    cursor: pointer;
 
     &:hover {
         background: white;
@@ -60,9 +63,12 @@ export default function Leaderboards(): JSX.Element {
             <Tooltip title={presentation.title} placement="left">
                 <Presentation>
                     <Place winner={isWinner}>{isWinner ? '🏆' : index + 1}</Place>
-                    <Title level={5} style={{ overflow: 'hidden'}}>
-                        {presentation.title.length > 30 ? presentation.title.substring(0,27) + '...' : presentation.title}
-                    </Title>
+                    <Flex column>
+                        <Title level={5} style={{ overflow: 'hidden'}}>
+                            {presentation.title.length > 30 ? presentation.title.substring(0,27) + '...' : presentation.title}
+                        </Title>
+                        <ReactionSummary presentationId={presentation.id }/>
+                    </Flex>
                 </Presentation>
             </Tooltip>
         )
