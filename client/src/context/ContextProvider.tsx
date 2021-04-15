@@ -82,9 +82,9 @@ const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
 
   const getIsAdmin = () => {
     const users = roomState?.users || [];
-    let admin = users.find(user => user.isAdmin);
+    let admins = users.filter(user => user.isAdmin);
 
-    return admin ? admin.user === nickname : false;
+    return admins.find(admin => admin.user === nickname) ? true : false;
   }
 
   return (

@@ -79,6 +79,7 @@ export default function Leaderboards(): JSX.Element {
 
     useEffect(() => {
         const isUserAdmin = getIsAdmin();
+        console.log(isUserAdmin)
         setIsAdmin(isUserAdmin);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomState])
