@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import Flex from '../../../components/Flex';
 
 import reactions from '../../../mock/reactions.json';
+import { AppContext } from '../../../context/ContextProvider';
 
 const ReactionButton = styled.div`
     background: #FFFFFF;
@@ -24,13 +25,20 @@ const ReactionButton = styled.div`
 `;
 
 export default function ReactionBar() {
+
+    const { socket } = useContext(AppContext);
+
+    const onReactionClick = (reactionType: string) => {
+        console.log("hi", socket)
+        socket?.emit('reaction', { type: reactionType });
+    }
     const mappedReactions = reactions.map((reaction) => {
         return (
-            <ReactionButton>{reaction.emoji}</ReactionButton>
+            <ReactionButton onClick={() => onReactionClick(reaction.id)}>{reaction.emoji}</ReactionButton>
         )
     })
     return (
-        <Flex row justify align style={{ padding: '24px'}}>
+        <Flex row justify align style={{ padding: '24px' }}>
             {mappedReactions}
         </Flex>
     )

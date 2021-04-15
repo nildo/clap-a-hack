@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Typography } from 'antd';
 import Flex from '../../../components/Flex';
 import { RGBColor } from '../../../types';
-
-import users from '../../../mock/users.json';
+import { AppContext } from '../../../context/ContextProvider';
 
 const { Title } = Typography;
 
@@ -15,7 +14,7 @@ const OnlineUser = styled.div.attrs(({ userColor }: { userColor: RGBColor }) => 
             backgroundColor: `rgba(${r},${g},${b},${a})`,
         }
     }
-})<{ userColor: RGBColor }>`
+}) <{ userColor: RGBColor }>`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -27,12 +26,13 @@ const OnlineUser = styled.div.attrs(({ userColor }: { userColor: RGBColor }) => 
 `;
 
 export default function OnlineList() {
-    const mappedAdmins = users
+    const { roomState } = useContext(AppContext);
+    const mappedAdmins = roomState?.users
         .filter((user: any) => user.isAdmin)
         .map((user: any) => 
             <OnlineUser userColor={user.color}>@{user.name}</OnlineUser>
     );
-    const mappedUsers = users
+    const mappedUsers = roomState?.users
         .filter((user: any) => !user.isAdmin)
         .map((user: any) => 
             <OnlineUser userColor={user.color}>@{user.name}</OnlineUser>
@@ -50,4 +50,3 @@ export default function OnlineList() {
         </Flex>
     )
 }
-

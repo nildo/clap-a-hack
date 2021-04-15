@@ -5,6 +5,13 @@ const app = express();
 
 app.use(express.static("client/build"));
 
+const DEFAULT_COLOR = {
+  r: 255,
+  g: 0,
+  b: 0,
+  a: 100,
+};
+
 // listen for requests :)
 const listener = app.listen(process.env.PORT, () => {
   console.log("Your app is listening on port " + listener.address().port);
@@ -17,18 +24,17 @@ const io = socketIO(listener, {
   },
 });
 
- const rooms = {};
-
+const rooms = {};
 
 io.on("connection", (client) => {
   const { id } = client;
-  const { room = "test", user = "anonymous fox", color = "blue" } =
+  const { room = "test", user = "anonymous fox", color = DEFAULT_COLOR } =
     client.handshake.query || {};
 
   if (rooms[room]) {
     rooms[room] = {
       ...rooms[room],
-      users: [...rooms[room].users, { user, color, id }],
+      users: [...rooms[room].users, { user, color: JSON.parse(color), id }],
     };
   } else {
     rooms[room] = {
@@ -39,7 +45,7 @@ io.on("connection", (client) => {
       presentations: [],
     };
   }
-  console.table(rooms)
+  console.table(rooms);
   client.join(room);
 
   io.emit("stateUpdate", rooms[room]);
@@ -50,18 +56,18 @@ io.on("connection", (client) => {
     const { currentPresentation } = currentRoom;
 
     let updatedPresentations = [...currentRoom.presentations];
-
-    updatedPresentations[currentPresentation] = {
-      ...updatedPresentations[currentPresentation],
-      [type]: updatedPresentations[currentPresentation][type] + 1,
-    };
+    if (currentPresentation !== -1)
+      updatedPresentations[currentPresentation] = {
+        ...updatedPresentations[currentPresentation],
+        [type]: updatedPresentations[currentPresentation][type] + 1,
+      };
 
     rooms[room] = {
       ...currentRoom,
       presentations: updatedPresentations,
       reactions: {
         ...currentRoom.reactions,
-        [type]: currentRoom.reactions[type] + 1,
+        [type]: (currentRoom.reactions[type] || 0) + 1,
       },
     };
 
@@ -69,7 +75,6 @@ io.on("connection", (client) => {
   });
 
   client.on("disconnect", (data) => {
-    console.log("data is", client.id);
     rooms[room] = {
       ...rooms[room],
       users: rooms[room].users.filter((user) => user.id !== client.id),
