@@ -52,7 +52,7 @@ io.on("connection", (client) => {
 
   client.join(room);
 
-  io.to(room)o.emit("stateUpdate", rooms[room]);
+  io.to(room).emit("stateUpdate", rooms[room]);
 
   client.on("reaction", (data) => {
     const { type } = data;
@@ -65,7 +65,9 @@ io.on("connection", (client) => {
         ...updatedPresentations[currentPresentation],
         reactions: {
           ...updatedPresentations[currentPresentation].reactions,
-          [type]: (updatedPresentations[currentPresentation].reactions[type] || 0) + 1,
+          [type]:
+            (updatedPresentations[currentPresentation].reactions[type] || 0) +
+            1,
         },
       };
     }
@@ -79,7 +81,7 @@ io.on("connection", (client) => {
       },
       soundLevel: {
         ...currentRoom.soundLevel,
-       [type]: currentRoom.soundLevel[type] + 1,
+        [type]: currentRoom.soundLevel[type] + 1,
       },
     };
 
@@ -88,7 +90,10 @@ io.on("connection", (client) => {
         ...rooms[room],
         soundLevel: {
           ...rooms[room].soundLevel,
-        [type]: (rooms[room].soundLevel[type] - 1 > 0) ? rooms[room].soundLevel[type] - 1 : 0,
+          [type]:
+            rooms[room].soundLevel[type] - 1 > 0
+              ? rooms[room].soundLevel[type] - 1
+              : 0,
         },
       };
       io.to(room).emit("stateUpdate", rooms[room]);
@@ -129,7 +134,7 @@ io.on("connection", (client) => {
     const { presentationIndex } = data;
     rooms[room] = {
       ...rooms[room],
-      currentPresentation: presentationIndex
+      currentPresentation: presentationIndex,
     };
     io.to(room).emit("stateUpdate", rooms[room]);
   });
