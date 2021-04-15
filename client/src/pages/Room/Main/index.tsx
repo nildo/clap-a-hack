@@ -25,20 +25,34 @@ export default function Main() {
     const { roomState } = useContext(AppContext);
     const currentPresentation = roomState?.presentations[roomState?.currentPresentation ?? 0];
     const reactions = currentPresentation?.reactions ?? {};
-console.log(roomState?.resultsVisible)
+
+    const presentationList = roomState?.presentations
+        .map((presentation: any) => {
+            const reactions = Object.values(presentation.reactions) ?? [];
+            const points = reactions.reduce((sum: number, point: any) => sum + point, 0) ?? 0;
+            return {
+                ...presentation,
+                points
+            };
+        })
+        .sort((a: any, b: any) => b.points - a.points) ?? []
+
     return (
         <Wrapper>
-        <Confetti
-            gravity={0.4}
-            run={!!roomState?.resultsVisible} 
-            numberOfPieces={900}
-          />
+            <Confetti
+                gravity={0.05}
+                run={!!roomState?.resultsVisible}
+                numberOfPieces={400}
+            />
             <Text>Room ID:</Text>
             <Flex row style={{ justifyContent: "space-between" }}>
                 <Title level={3}>{roomid}</Title>
-                <ReactionSummary reactions={reactions} />
+                {roomState?.resultsVisible ?
+                    <h3>Winner is: {presentationList[0].name} 🚀🚀🚀</h3>
+                    :
+                    <ReactionSummary reactions={reactions} />}
             </Flex>
-            <Presentation />
+            <Presentation winner={presentationList[0] ? presentationList[0]?.name : 'not yet'}/>
             <ReactionBar />
             <OnlineList />
             <Sound />

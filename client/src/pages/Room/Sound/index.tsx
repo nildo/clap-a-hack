@@ -5,7 +5,7 @@ import { AppContext } from '../../../context/ContextProvider';
 const MULTIPLIER = 2;
 
 export default function Sound() {
-  const { roomState: { soundLevel = { clap: 0, laugh: 0 }, users } } = useContext(AppContext);
+  const { roomState: { soundLevel = { clap: 0, laugh: 0 }, users, resultsVisible } } = useContext(AppContext);
 
   const [clap1, setClap1] = useState(false);
   const [clap2, setClap2] = useState(false);
@@ -74,11 +74,13 @@ export default function Sound() {
       {clap1 && <ReactAudioPlayer src="/applause-01.mp3" autoPlay />}
       {clap2 && <ReactAudioPlayer src="/applause-02.mp3" autoPlay />}
       {clap3 && <ReactAudioPlayer src="/applause-03.mp3" autoPlay />}
-      {clap4 && <ReactAudioPlayer src="/applause-04.mp3" autoPlay />}
+      {(resultsVisible
+        || clap4) && <ReactAudioPlayer src="/applause-04.mp3" autoPlay />}
       {laugh1 && <ReactAudioPlayer src="/laugh-01.mp3" autoPlay />}
       {laugh2 && <ReactAudioPlayer src="/laugh-02.mp3" autoPlay />}
       {laugh3 && <ReactAudioPlayer src="/laugh-03.mp3" autoPlay />}
       {laugh4 && <ReactAudioPlayer src="/clap.mp3" autoPlay />}
+      {resultsVisible && <ReactAudioPlayer src="/music.mp3" autoPlay />}
     </div>
   )
 }
