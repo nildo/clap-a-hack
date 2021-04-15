@@ -7,6 +7,7 @@ import ReactionSummary from '../ReactionSummary';
 import Presentation from '../Presentation';
 import ReactionBar from '../ReactionBar';
 import OnlineList from '../OnlineList';
+import Sound from '../Sound';
 
 const { Title, Text } = Typography;
 
@@ -31,6 +32,7 @@ export default function Main() {
             <Presentation />
             <ReactionBar />
             <OnlineList />
+            <Sound soundLevels={{ laugh: 3 }}/>
         </Wrapper>
     )
 }
