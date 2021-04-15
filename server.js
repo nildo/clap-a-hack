@@ -18,26 +18,52 @@ const io = socketIO(listener, {
 });
 
 const state = {
-  numOnlineUsers: 0,
-  laughCount: 0,
+   rooms: {} 
 };
+const rooms = io.of("/").adapter.rooms;
 
 io.on('connection', (client) => {
+
+  const { room } = client.handshake.query;
+
+  if(rooms[room]){
+    rooms[room].numOnlineUsers++;
+  } else {
+    rooms[room] = {
+      numOnlineUsers: 1,
+      laughCount: 0,
+    }
+  }
+  client.join(room);
+
   state.numOnlineUsers++;
-  io.emit('stateUpdate', state);
+
+  io.emit('stateUpdate', rooms[room]);
 
   client.on('laugh', () => {
-    state.laughCount++;
-    io.emit('stateUpdate', state);
+    rooms[room].laughCount++;
+
+    io.emit('stateUpdate', rooms[room]);
 
     setTimeout(() => {
       state.laughCount--;
-      io.emit('stateUpdate', state);
+      io.emit('stateUpdate', rooms[room]);
     }, 5000);
   });
 
   client.on('disconnect', () => {
-    state.numOnlineUsers--;
-    io.emit('stateUpdate', state);
+    rooms[room].numOnlineUsers--;
+    io.emit('stateUpdate', rooms[room]);
   });
 });
+
+
+io.of("/").adapter.on("create-room", (room) => {
+  console.log(`room ${room} was created`);
+});
+
+io.of("/").adapter.on("join-room", (room, id) => {
+  console.log(`socket ${id} has joined room ${room}`);
+});
+
+
