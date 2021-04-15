@@ -8,11 +8,14 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "watch": "PORT=3001 nodemon server.js"
+    "watch": "env PORT=3001 nodemon server.js"
   },
   "dependencies": {
+    "antd": "^4.15.1",
     "express": "^4.17.1",
-    "socket.io": "^3.0.4"
+    "react-router-dom": "^5.2.0",
+    "socket.io": "^3.0.4",
+    "styled-components": "^5.2.3"
   },
   "engines": {
     "node": "12.x"
