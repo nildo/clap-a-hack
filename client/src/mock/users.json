@@ -1,0 +1,19 @@
+[
+    {
+        "name": "Issaaf",
+        "color": { "r": 211, "g": 7, "b": 24, "a": 100 },
+        "isAdmin": true
+    },
+    {
+        "name": "Anastasia",
+        "color": { "r": 12, "g": 1, "b": 177, "a": 100 }
+    },
+    {
+        "name": "Nildo",
+        "color": { "r": 2, "g": 217, "b": 240, "a": 100 }
+    },
+    {
+        "name": "Anna",
+        "color": { "r": 0, "g": 0, "b": 0, "a": 100 }
+    }
+]
