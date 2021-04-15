@@ -8,7 +8,7 @@ export type RoomState = {
   currentPresentation: number;
   presentations: Array<{name : string, reactions: ReactionCount}>
   reactions: ReactionCount,
-  users: Array<{ user: string, color: RGBColor, id: string}>,
+  users: Array<{ user: string, color: RGBColor, id: string, isAdmin: boolean}>,
   resultsVisible: boolean,
 }
 
@@ -20,6 +20,7 @@ export type ContextState = {
   userColor: RGBColor;
   setUserColor: (val: RGBColor) => void;
   roomState: RoomState | any;
+  getIsAdmin: () => boolean;
 }
 
 

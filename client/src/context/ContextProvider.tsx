@@ -27,6 +27,7 @@ const defaultState: ContextState = {
   setUserColor: () => undefined,
   userColor: DEFAULT_COLOR,
   roomState: DEFAULT_ROOM_STATE,
+  getIsAdmin: () => false,
 };
 
 export const AppContext = createContext<ContextState>(defaultState);
@@ -69,17 +70,24 @@ const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
       })
     })
 
-    socket?.on('showResults', (show: boolean) => {
+    socket?.on('showResults', () => {
       setRoomState({
         ...roomState,
-        resultsVisible: show
+        resultsVisible: true
       })
     })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
+  const getIsAdmin = () => {
+    const users = roomState?.users || [];
+    let admin = users.find(user => user.isAdmin);
+
+    return admin ? admin.user === nickname : false;
+  }
+
   return (
-    <AppContext.Provider value={{ socket, startConnection, nickname, setNickname, userColor, setUserColor, roomState }}>
+    <AppContext.Provider value={{ socket, startConnection, nickname, setNickname, userColor, setUserColor, roomState, getIsAdmin }}>
       {children}
     </AppContext.Provider>
   )
