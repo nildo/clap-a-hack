@@ -84,12 +84,13 @@ io.on("connection", (client) => {
     };
 
     setTimeout(() => {
+      const thisRoom = rooms[room];
       const currentSoundLevel = rooms[room].soundLevel;
       rooms[room] = {
         ...rooms[room],
         soundLevel: {
-          ...currentRoom.sound,
-          [type]: (currentRoom.soundLevel[type] - 1 )|| 1,
+          ...thisRoom.sound,
+          [type]: (thisRoom.soundLevel[type] - 1 )|| 1,
         },
       };
       io.to(room).emit("stateUpdate", rooms[room]);
