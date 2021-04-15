@@ -48,8 +48,8 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.7",
     "@types/react-color": "^3.0.4",
+    "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.4",
     "cra-build-watch": "^3.4.0"
   }
