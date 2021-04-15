@@ -97,6 +97,29 @@ io.on("connection", (client) => {
     };
     io.emit("stateUpdate", rooms[room]);
   });
+
+  client.on("addPresentation", (data) => {
+    const { name } = data;
+    rooms[room] = {
+      ...rooms[room],
+      presentations: [
+        ...rooms[room].presentations,
+        {
+          name,
+          reactions: {}
+        }
+      ]
+    };
+    io.emit("stateUpdate", rooms[room]);
+  });
+
+  client.on("showResults", (data) => {
+    rooms[room] = {
+      ...rooms[room],
+      resultsVisible: true
+    };
+    io.emit("stateUpdate", rooms[room]);
+  });
 });
 
 io.of("/").adapter.on("create-room", (room) => {
