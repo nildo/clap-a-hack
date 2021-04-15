@@ -21,8 +21,9 @@ const Wrapper = styled.div`
 
 export default function Presentation() {
     const { roomState } = useContext(AppContext);
+    console.log(roomState)
     return (<Wrapper>
-        <Title level={3}>Volume{roomState?.soundLevel}</Title>
+        <Title level={3}>Volumes</Title>
         <Title level={5}>Share your reactions 🔥</Title>
     </Wrapper>)
 }

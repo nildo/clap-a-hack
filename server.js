@@ -39,7 +39,7 @@ io.on("connection", (client) => {
   } else {
     rooms[room] = {
       users: [{ user, color }],
-      soundLevel: 0,
+      soundLevel: {laugh: 0, clap: 0, boo:0},
       reactions: [],
       currentPresentation: -1,
       presentations: [],
@@ -69,14 +69,20 @@ io.on("connection", (client) => {
         ...currentRoom.reactions,
         [type]: (currentRoom.reactions[type] || 0) + 1,
       },
-      soundLevel: currentRoom.soundLevel < 25 ? currentRoom.soundLevel + 1 : 25
+      soundLevel: {
+        ...currentRoom.sound,
+       type: currentRoom.soundLevel[type] < 25 ? currentRoom.soundLevel[type] + 1 : 25,
+      }
     };
    
     setTimeout(() => {
-      const currentSoundLevel = rooms[room].soundLevel || 1;
+      const currentSoundLevel = rooms[room].soundLevel;
       rooms[room] = {
         ...rooms[room],
-        soundLevel: currentSoundLevel - 1,
+        soundLevel: {
+          ...currentRoom.sound,
+         type: currentRoom.soundLevel[type] - 1 || 1,
+        },
       }
       io.emit("stateUpdate", rooms[room]);
     }, 3000)
