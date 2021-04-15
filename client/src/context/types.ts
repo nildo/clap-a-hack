@@ -1,7 +1,5 @@
 import { Socket } from "socket.io-client";
-import { RGBColor } from '../pages/Login/types';
-
-
+import { RGBColor } from '../types';
 
 export type ContextState = {
   socket?: Socket;

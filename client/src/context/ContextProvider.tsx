@@ -3,8 +3,6 @@ import { RGBColor } from 'react-color';
 import { io } from 'socket.io-client';
 import { ContextState } from './types';
 
-
-
 const DEFAULT_COLOR = {
   r: 255,
   g: 0,
