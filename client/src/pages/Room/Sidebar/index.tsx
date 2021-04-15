@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Typography } from 'antd';
+import Leaderboards from './Leaderboards';
 
 const { Title } = Typography;
 
@@ -18,7 +19,8 @@ const Wrapper = styled.div`
 export default function Sidebar() {
     return (
         <Wrapper>
-            <Title level={5}>Leadership board</Title>
+            <Title level={4}>Leadership board</Title>
+            <Leaderboards />
         </Wrapper>
     )
 }
