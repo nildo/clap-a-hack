@@ -101,25 +101,25 @@ function LoginPrompt() {
     }, [roomExists])
 
     return <Prompt>
-        <Title level={2}>Helloooooooo</Title>
+        <Title level={2} style={{ fontWeight: 600 }}>Helloooooooo</Title>
         <Group>
-            <Title level={5}>Write your name and pick color</Title>
+            <Title level={5} style={{ margin: 0, padding: 0}} >Write your name and pick color</Title>
             <Row>
                 <Input 
                     placeholder="Nickname" 
                     value={nickname} 
                     onChange={onNickChange} 
                     style={{ 
-                        marginRight: '12px', 
+                        margin: '8px 12px 8px 0',
                         color: `rgba(${userColor.r},${userColor.g},${userColor.b},${userColor.a})`
                     }}/>
                 <ColorPicker userColor={userColor} setUserColor={setUserColor} />
             </Row>
         </Group>
         <Group>
-            <Title level={5}>Enter room name</Title>
-            <Text>Should be unique!</Text>
-            <Input placeholder="Room name" value={roomName} onChange={onRoomChange} />
+            <Title level={5} style={{ margin: 0, padding: 0 }} >Enter room name</Title>
+            <Text style={{ margin: 0, padding: 0 }} >Should be unique!</Text>
+            <Input placeholder="Room name" value={roomName} onChange={onRoomChange} style={{ margin: "8px 0" }} />
         </Group>
         <Group>
             {roomExists === false && 
