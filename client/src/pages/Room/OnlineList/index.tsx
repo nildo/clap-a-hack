@@ -19,7 +19,7 @@ const OnlineUser = styled.div<{ userColor: RGBColor }>`
     margin: 0 4px;
     font-weight: bold;
     color: white;
-    background: ${({ userColor }) => userColor.r ? toRGB(userColor) : toRGB(DEFAULT_COLOR)}
+    background: ${({ userColor }) => userColor.r ? toRGB(userColor) : toRGB(DEFAULT_COLOR)};
 `;
 
 export default function OnlineList() {
@@ -27,12 +27,12 @@ export default function OnlineList() {
     const mappedAdmins = () => roomState?.users
         .filter((user: any) => user.isAdmin)
         .map((user: any) => 
-        <OnlineUser key={user.id} userColor={user.color || DEFAULT_COLOR}>@{user.user}</OnlineUser>
+            <OnlineUser key={user.id} userColor={user.color || DEFAULT_COLOR}>@{user.user}</OnlineUser>
     );
     const mappedUsers = () => roomState?.users
         .filter((user: any) => !user.isAdmin)
         .map((user: any) => 
-        <OnlineUser key={user.id} userColor={user.color || DEFAULT_COLOR}>@{user.user}</OnlineUser>
+            <OnlineUser key={user.id} userColor={user.color || DEFAULT_COLOR}>@{user.user}</OnlineUser>
     );
 
     return (

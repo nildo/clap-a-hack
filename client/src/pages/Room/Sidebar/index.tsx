@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Typography, Input, Button, Popconfirm, notification } from 'antd';
 import Flex from '../../../components/Flex';
@@ -28,9 +28,10 @@ export default function Sidebar() {
     const onNewPresentationAdd = () => {
         socket?.emit('addPresentation', { name: presentationTitle });
         notification.success({ message: 'Yay!', description: 'New presentation added!' });
+        setPresentationTitle('');
     }
     const onShowVotingResults = () => {
-        alert('It is done.');
+        socket?.emit('showResults');
     }
 
     return (

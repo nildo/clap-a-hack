@@ -5,9 +5,6 @@ import { AppContext } from '../../../context/ContextProvider';
 import Flex from '../../../components/Flex';
 import ReactionSummary from '../ReactionSummary';
 
-// TODO this is just a mock
-import presentations from '../../../mock/presentations.json';
-
 const { Title } = Typography;
 
 const Place = styled.div.attrs(({ winner } : { winner: boolean }) => {
@@ -39,9 +36,7 @@ const PresentationList = styled.div`
     flex-direction: column;
 `
 const Presentation = styled.div.attrs(({ active } : { active: boolean }) => {
-    const style: any = {
-        backround: 'transparent'
-    };
+    const style: any = { backround: 'transparent' };
     if (active) style.background = "#FFF1CC"; 
     return { style }
 })`
@@ -51,7 +46,6 @@ const Presentation = styled.div.attrs(({ active } : { active: boolean }) => {
     border-radius: 12px;
     margin: 8px 0;
     cursor: pointer;
-
     &:hover {
         background: white;
     }
@@ -59,21 +53,38 @@ const Presentation = styled.div.attrs(({ active } : { active: boolean }) => {
 
 export default function Leaderboards(): JSX.Element {
     const { roomState } = useContext(AppContext);
-    const presentationList = roomState?.presentations.map((presentation: any, index: number) => {
+    const resultsVisible = roomState?.resultsVisible;
+    const presentationList = resultsVisible 
+        ? roomState?.presentations
+            .map((presentation: any) => {
+                const reactions = Object.values(presentation.reactions) ?? [];
+                const sumOfAllReactions = reactions.reduce((accumulator: number, reaction: any) => {
+                    if (reaction?.number)
+                        return accumulator + Number(reaction.number);
+                    return accumulator;
+                }, 0) ?? 0;
+                return {
+                    ...presentation,
+                    points: sumOfAllReactions
+                };
+            }) ?? []
+        : roomState?.presentations ?? [];
+
+    const presentations = presentationList.map((presentation: any, index: number) => {
         const isWinner = index === 0;
         return (
             <Tooltip title={presentation.name} placement="left">
                 <Presentation>
-                    <Place winner={isWinner}>{isWinner ? '🏆' : index + 1}</Place>
+                    <Place winner={isWinner}>{resultsVisible && isWinner ? '🏆' : index + 1}</Place>
                     <Flex column>
                         <Title level={5} style={{ overflow: 'hidden'}}>
                             {presentation.name?.length > 30 ? presentation.name?.substring(0,27) + '...' : presentation.name}
                         </Title>
-                        <ReactionSummary presentationId={presentation.id }/>
+                        {resultsVisible && <ReactionSummary presentationId={presentation.id } />}
                     </Flex>
                 </Presentation>
             </Tooltip>
         )
     });
-    return <PresentationList>{presentationList}</PresentationList>
+    return <PresentationList>{presentations}</PresentationList>
 }
