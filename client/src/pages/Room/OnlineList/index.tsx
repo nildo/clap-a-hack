@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Typography } from 'antd';
 import Flex from '../../../components/Flex';
 import { RGBColor } from '../../../types';
+import { AppContext } from '../../../context/ContextProvider';
 
 const { Title } = Typography;
 
@@ -13,7 +14,7 @@ const OnlineUser = styled.div.attrs(({ userColor }: { userColor: RGBColor }) => 
             backgroundColor: `rgba(${r},${g},${b},${a})`,
         }
     }
-})<{ userColor: RGBColor }>`
+}) <{ userColor: RGBColor }>`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -25,32 +26,14 @@ const OnlineUser = styled.div.attrs(({ userColor }: { userColor: RGBColor }) => 
 `;
 
 export default function OnlineList() {
-    const mappedUsers = usersMock.map((user: any) => 
-        <OnlineUser userColor={user.color}>@{user.name}</OnlineUser>
+    const { roomState } = useContext(AppContext)
+    const mappedUsers = roomState?.users.map((user: any) =>
+        <OnlineUser key={user.id} userColor={user.color}>@{user.user}</OnlineUser>
     );
     return (
-        <Flex row justify align style={{ position: 'sticky'}}>
+        <Flex row justify align style={{ position: 'sticky' }}>
             <Title level={5} style={{ margin: 0 }}>Online now:</Title>
             {mappedUsers}
         </Flex>
     )
 }
-
-const usersMock = [
-    {
-        name: "Issaaf",
-        color: { r: 211, g: 7, b: 24, a: 100 }
-    },
-    {
-        name: "Anastasia",
-        color: { r: 12, g: 1, b: 177, a: 100 }
-    },
-    {
-        name: "Nildo",
-        color: { r: 2, g: 217, b: 240, a: 100 }
-    },
-    {
-        name: "Anna",
-        color: { r: 0, g: 0, b: 0, a: 100 }
-    },
-]
