@@ -1,62 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { SketchPicker } from 'react-color';
-import styled from 'styled-components';
+import { ColorSwatch, ColorPreview, ColorPickPopover, ColorPickCover } from './components';
+import { RGBColor } from './types';
 
-type RGBColor = {
-    r: number;
-    g: number;
-    b: number;
-    a?: number;
+type Props = {
+  userColor: RGBColor,
+  setUserColor: (newColor: RGBColor) => void;
 }
-
-const Swatch = styled.div`
-  padding: 5px;
-  background: #fff;
-  border-radius: 1px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.1);
-  display: inline-block;
-  cursor: pointer;
-`;
-const ColorPreview = styled.div`
-  width: 36px;
-  height: 14px;
-  border-radius: 2px;
-  /* background: `rgba(${ this.state.color.r }, ${ this.state.color.g }, ${ this.state.color.b }, ${ this.state.color.a })`, */
-`;
-const ColorPickPopover = styled.div`
-  position: absolute;
-      z-index: 2;
-`;
-const ColorPickerCover = styled.div`
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-`;
-
-export default function ColorPicker() {
+export default function ColorPicker(props: Props) {
+  const { userColor, setUserColor } = props;
   const [ showColorPicker, setShowColorPicker ] = useState(false);
-  const [ userColor, setUserColor ] = useState<RGBColor>({
-    r: 241,
-    g: 112,
-    b: 19,
-    a: 1
-  });
   const onColorPickerClick = () => setShowColorPicker(!showColorPicker);
   const onUserColorChange = (color: { rgb: RGBColor }) => setUserColor(color.rgb);
 
   return (
-    <>
-      <Swatch onClick={onColorPickerClick}>
-        <ColorPreview />
-      </Swatch>
+    <div style={{ position: 'relative' }}>
+      <ColorSwatch onClick={onColorPickerClick}>
+        <ColorPreview userColor={ userColor }/>
+      </ColorSwatch>
       { showColorPicker ? 
         <ColorPickPopover>
-          <ColorPickerCover onClick={() => setShowColorPicker(false)} />
+          <ColorPickCover onClick={() => setShowColorPicker(false)} />
           <SketchPicker color={userColor} onChange={onUserColorChange} />
         </ColorPickPopover> 
       : null }
-    </>
+    </div>
   )
 }
