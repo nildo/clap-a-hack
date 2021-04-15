@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Typography, Dropdown, Menu, Button } from 'antd';
 import Flex from '../../../components/Flex';
@@ -25,7 +25,12 @@ const OnlineUser = styled.div<{ userColor: RGBColor }>`
 
 export default function OnlineList() {
     const { socket, roomState, getIsAdmin } = useContext(AppContext);
-    const isAdmin = getIsAdmin();
+    const [isAdmin, setIsAdmin] = useState(false);
+    useEffect(() => {
+        const isUserAdmin = getIsAdmin();
+        setIsAdmin(isUserAdmin);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [roomState])
 
     const mappedAdmins = () => roomState?.users
         .filter((user: any) => user.isAdmin)

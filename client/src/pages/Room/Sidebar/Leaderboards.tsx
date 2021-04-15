@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Typography, Tooltip } from 'antd';
 import { AppContext } from '../../../context/ContextProvider';
@@ -53,9 +53,10 @@ const Presentation = styled.div.attrs(({ isActive } : { isActive: boolean }) => 
 `
 
 export default function Leaderboards(): JSX.Element {
-    const { roomState, socket } = useContext(AppContext);
+    const { roomState, socket, getIsAdmin } = useContext(AppContext);
+    const [isAdmin, setIsAdmin] = useState(false);
     const currentPresentation = roomState?.currentPresentation ?? 0;
-    const isAdmin = true;
+    
     const resultsVisible = roomState?.resultsVisible;
     const presentationList = resultsVisible 
         ? roomState?.presentations
@@ -75,6 +76,12 @@ export default function Leaderboards(): JSX.Element {
             socket?.emit('setActivePresentation', { presentationIndex })
         }
     };
+
+    useEffect(() => {
+        const isUserAdmin = getIsAdmin();
+        setIsAdmin(isUserAdmin);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [roomState])
 
     const presentations = presentationList.map((presentation: any, index: number) => {
         const isWinner = index === 0;

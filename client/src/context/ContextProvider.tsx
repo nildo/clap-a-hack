@@ -47,6 +47,7 @@ const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
   useEffect(() => {
     socket?.on('stateUpdate', (data: any) => {
       setRoomState(data);
+      console.log(data)
       console.log("Data", data)
     });
 

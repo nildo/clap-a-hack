@@ -13,6 +13,7 @@ import AddNickname from '../../components/AddNickname';
 const Wrapper = styled.div`
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
 `;
 
 export default function Room() {

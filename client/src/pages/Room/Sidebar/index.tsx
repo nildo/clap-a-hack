@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Typography, Input, Button, Popconfirm, notification } from 'antd';
 import Flex from '../../../components/Flex';
@@ -21,8 +21,8 @@ const Wrapper = styled.div`
 export default function Sidebar() {
     const { socket, roomState, getIsAdmin } = useContext(AppContext);
     const resultsVisible = roomState?.resultsVisible;
-    const isAdmin = getIsAdmin();
     const [presentationTitle, setPresentationTitle] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const onChangePresentationTitle = (event: any) => 
         setPresentationTitle(event.target.value);
@@ -34,6 +34,12 @@ export default function Sidebar() {
     const onShowVotingResults = () => {
         socket?.emit('showResults', { show: !resultsVisible });
     }
+
+    useEffect(() => {
+        const isUserAdmin = getIsAdmin();
+        setIsAdmin(isUserAdmin);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [roomState])
 
     return (
         <Wrapper>
