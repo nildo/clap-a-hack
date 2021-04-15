@@ -134,6 +134,38 @@ io.on("connection", (client) => {
     io.emit("stateUpdate", rooms[room]);
   });
 
+  client.on("makeAdmin", (data) => {
+    const { userToAdmin } = data;
+    rooms[room] = {
+      ...rooms[room],
+      users: rooms[room].users.map((user) => {
+        if (user.id === userToAdmin.id)
+          return {
+            ...user,
+            isAdmin: true
+          };
+        else return user;
+      }),
+    };
+    io.to(room).emit("stateUpdate", rooms[room]);
+  })
+
+  client.on("removeAdmin", (data) => {
+    const { userToDeadmin } = data;
+    rooms[room] = {
+      ...rooms[room],
+      users: rooms[room].users.map((user) => {
+        if (user.id === userToDeadmin.id)
+          return {
+            ...user,
+            isAdmin: false
+          };
+        else return user;
+      }),
+    };
+    io.to(room).emit("stateUpdate", rooms[room]);
+  })
+
   client.on("showResults", (data) => {
     rooms[room] = {
       ...rooms[room],

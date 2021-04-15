@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 export default function Sidebar() {
     const { socket, roomState, getIsAdmin } = useContext(AppContext);
     const resultsVisible = roomState?.resultsVisible;
-    const isAdmin = getIsAdmin(); // TODO
+    const isAdmin = getIsAdmin();
     const [presentationTitle, setPresentationTitle] = useState('');
 
     const onChangePresentationTitle = (event: any) => 

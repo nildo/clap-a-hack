@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { AppContext } from '../../../context/ContextProvider';
 import Flex from '../../../components/Flex';
 
 import reactions from '../../../mock/reactions.json';
@@ -17,6 +18,8 @@ type Props = {
     }
 }
 export default function ReactionSummary(props: Props) {
+    const { roomState } = useContext(AppContext);
+    const resultsVisible = roomState?.resultsVisible;
     const currentReactions = Object.entries(props.reactions)
         .map(reaction => ({
             id: reaction[0],
@@ -25,7 +28,8 @@ export default function ReactionSummary(props: Props) {
     const mappedReactions = currentReactions.map((currentReaction: any) => {
         const emoji = reactions.find(reaction => reaction.id === currentReaction.id)?.emoji;
         return (
-            <Flex row style={{ margin: '0 4px'}}>{emoji} {currentReaction?.number}</Flex>
+            <Flex row style={{ margin: '0 4px'}}>{emoji}
+            {resultsVisible ? currentReaction?.number : '???'}</Flex>
         )
     })
     return (

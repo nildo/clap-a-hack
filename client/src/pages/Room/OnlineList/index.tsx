@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Typography } from 'antd';
+import { Typography, Dropdown, Menu, Button } from 'antd';
 import Flex from '../../../components/Flex';
 import { RGBColor } from '../../../types';
 import { AppContext, DEFAULT_COLOR } from '../../../context/ContextProvider';
@@ -19,21 +19,57 @@ const OnlineUser = styled.div<{ userColor: RGBColor }>`
     margin: 0 4px;
     font-weight: bold;
     color: white;
+    cursor: pointer;
     background: ${({ userColor }) => userColor.r ? toRGB(userColor) : toRGB(DEFAULT_COLOR)};
 `;
 
 export default function OnlineList() {
-    const { roomState } = useContext(AppContext);
+    const { socket, roomState, getIsAdmin } = useContext(AppContext);
+    const isAdmin = getIsAdmin();
+
     const mappedAdmins = () => roomState?.users
         .filter((user: any) => user.isAdmin)
         .map((user: any) => 
-            <OnlineUser key={user.id} userColor={user.color || DEFAULT_COLOR}>@{user.user}</OnlineUser>
+            <Dropdown overlay={adminMenu(user)} trigger={['click']} disabled={!isAdmin}>
+                <OnlineUser key={user.id} userColor={user.color || DEFAULT_COLOR}>@{user.user}</OnlineUser>
+            </Dropdown>
     );
     const mappedUsers = () => roomState?.users
         .filter((user: any) => !user.isAdmin)
         .map((user: any) => 
-            <OnlineUser key={user.id} userColor={user.color || DEFAULT_COLOR}>@{user.user}</OnlineUser>
+            <Dropdown overlay={userMenu(user)} trigger={['click']} disabled={!isAdmin}>
+                <OnlineUser 
+                    key={user.id}
+                    userColor={user.color || DEFAULT_COLOR}
+                >
+                    @{user.user}
+                </OnlineUser>
+            </Dropdown>
     );
+
+    const onChangeAdminClick = (user: any, toAdmin: boolean) => {
+        if (isAdmin) {
+            if (toAdmin)
+                socket?.emit('makeAdmin', { userToAdmin: user });
+            if (!toAdmin)
+                socket?.emit('removeAdmin', { userToDeadmin: user })
+        }
+    }
+
+    const userMenu = (user: any) => (
+        <Menu>
+            <Menu.Item key="0">
+                <Button type="ghost" onClick={() => onChangeAdminClick(user, true)}>Make admin</Button>
+            </Menu.Item>
+        </Menu>
+    )
+    const adminMenu = (user: any) => (
+        <Menu>
+            <Menu.Item key="0">
+                <Button type="ghost" onClick={() => onChangeAdminClick(user, false)}>Remove admin</Button>
+            </Menu.Item>
+        </Menu>
+    )
 
     return (
         <Flex column>

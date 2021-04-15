@@ -87,7 +87,7 @@ export default function Leaderboards(): JSX.Element {
                         <Title level={5} style={{ overflow: 'hidden'}}>
                             {presentation.name?.length > 30 ? presentation.name?.substring(0,27) + '...' : presentation.name}
                         </Title>
-                        {resultsVisible && <ReactionSummary reactions={reactions} />}
+                        <ReactionSummary reactions={reactions} />
                     </Flex>
                 </Presentation>
             </Tooltip>
