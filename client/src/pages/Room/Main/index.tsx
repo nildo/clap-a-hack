@@ -9,6 +9,7 @@ import Presentation from '../Presentation';
 import ReactionBar from '../ReactionBar';
 import OnlineList from '../OnlineList';
 import Sound from '../Sound';
+import Confetti from "react-confetti";
 
 const { Title, Text } = Typography;
 
@@ -24,9 +25,14 @@ export default function Main() {
     const { roomState } = useContext(AppContext);
     const currentPresentation = roomState?.presentations[roomState?.currentPresentation ?? 0];
     const reactions = currentPresentation?.reactions ?? {};
-
+console.log(roomState?.resultsVisible)
     return (
         <Wrapper>
+        <Confetti
+            gravity={0.4}
+            run={!!roomState?.resultsVisible} 
+            numberOfPieces={900}
+          />
             <Text>Room ID:</Text>
             <Flex row style={{ justifyContent: "space-between" }}>
                 <Title level={3}>{roomid}</Title>
