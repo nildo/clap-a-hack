@@ -34,11 +34,11 @@ io.on("connection", (client) => {
   if (rooms[room]) {
     rooms[room] = {
       ...rooms[room],
-      users: [...rooms[room].users, { user, color: JSON.parse(color), id }],
+      users: [...rooms[room].users, { user, color: JSON.parse(color), id , isAdmin: true}],
     };
   } else {
     rooms[room] = {
-      users: [{ user, color }],
+      users: [{ user, color, isAdmin: false, id }],
       soundLevel: {laugh: 0, clap: 0, boo:0},
       reactions: [],
       currentPresentation: -1,
