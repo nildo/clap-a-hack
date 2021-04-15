@@ -40,20 +40,20 @@ export default function Main() {
 
     return (
         <Wrapper>
-            <Confetti
+            {roomState?.resultsVisible && <Confetti
                 gravity={0.05}
                 run={!!roomState?.resultsVisible}
                 numberOfPieces={400}
-            />
+            />}
             <Text>Room ID:</Text>
             <Flex row style={{ justifyContent: "space-between" }}>
                 <Title level={3}>{roomid}</Title>
                 {roomState?.resultsVisible ?
-                    <h3>Winner is: {presentationList[0].name} 🚀🚀🚀</h3>
+                    <h3>Winner is: {presentationList[0]?.name} 🚀🚀🚀</h3>
                     :
                     <ReactionSummary reactions={reactions} />}
             </Flex>
-            <Presentation winner={presentationList[0] ? presentationList[0]?.name : 'not yet'}/>
+            <Presentation winner={presentationList[0] ? presentationList[0]?.name : 'not yet'} />
             <ReactionBar />
             <OnlineList />
             <Sound />
