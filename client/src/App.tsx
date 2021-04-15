@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import { io } from 'socket.io-client';
 import ReactAudioPlayer from 'react-audio-player';
 
-const socket = io();
+console.log(process.env.NODE_ENV === 'development');
+
+const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '';
+
+const socket = io(host);
 
 const MULTIPLIER = 3;
 

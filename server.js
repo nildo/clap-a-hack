@@ -10,7 +10,12 @@ const listener = app.listen(process.env.PORT, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });
 
-const io = socketIO(listener);
+const io = socketIO(listener, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
 
 const state = {
   numOnlineUsers: 0,
