@@ -81,6 +81,7 @@ export default function Leaderboards(): JSX.Element {
 
     const presentations = presentationList.map((presentation: any, index: number) => {
         const isWinner = index === 0;
+        const reactions = presentation.reactions ?? {};
         return (
             <Tooltip title={presentation.name} placement="left">
                 <Presentation isActive={index === currentPresentation} onClick={() => onPresentationClick(index)}>
@@ -89,7 +90,7 @@ export default function Leaderboards(): JSX.Element {
                         <Title level={5} style={{ overflow: 'hidden'}}>
                             {presentation.name?.length > 30 ? presentation.name?.substring(0,27) + '...' : presentation.name}
                         </Title>
-                        {resultsVisible && <ReactionSummary presentationId={presentation.id } />}
+                        {resultsVisible && <ReactionSummary reactions={reactions} />}
                     </Flex>
                 </Presentation>
             </Tooltip>

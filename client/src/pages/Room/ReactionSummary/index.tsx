@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import Flex from '../../../components/Flex';
 
-import presentations from '../../../mock/presentations.json';
 import reactions from '../../../mock/reactions.json';
 
 const Wrapper = styled.div`
@@ -11,12 +10,18 @@ const Wrapper = styled.div`
 `
 
 type Props = {
-    presentationId: number
+    reactions: {
+        clap: number,
+        boo: number,
+        laugh: number
+    }
 }
 export default function ReactionSummary(props: Props) {
-    const { presentationId } = props;
-    const currentReactions = presentations.find((presentation: any) => 
-        presentation.id === presentationId)?.reactions ?? [];
+    const currentReactions = Object.entries(props.reactions)
+        .map(reaction => ({
+            id: reaction[0],
+            number: reaction[1]
+        })) ?? [];
     const mappedReactions = currentReactions.map((currentReaction: any) => {
         const emoji = reactions.find(reaction => reaction.id === currentReaction.id)?.emoji;
         return (

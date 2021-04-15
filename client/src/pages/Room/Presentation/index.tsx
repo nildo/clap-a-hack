@@ -23,7 +23,6 @@ export default function Presentation() {
     const { roomState } = useContext(AppContext);
     const presentationTitle = roomState?.presentations[roomState?.currentPresentation]?.name 
         ?? '404 PRESENTATION NOT FOUND';
-    console.log(roomState)
     return (<Wrapper>
         <Title level={1}>{ presentationTitle }</Title>
         <Title level={5}>Share your reactions 🔥</Title>
