@@ -5,7 +5,7 @@ import { ContextState, RoomState } from './types';
 
 
 
-const DEFAULT_COLOR = {
+export const DEFAULT_COLOR = {
   r: 255,
   g: 0,
   b: 0,
@@ -36,7 +36,7 @@ const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
 
   const [socket, setSocket] = useState<ContextState['socket']>();
 
-  const [nickname, setNickname] = useState('Anonymous Fox');
+  const [nickname, setNickname] = useState('');
   const [userColor, setUserColor] = useState<RGBColor>(DEFAULT_COLOR);
 
   const [roomState, setRoomState] = useState<RoomState>(DEFAULT_ROOM_STATE);

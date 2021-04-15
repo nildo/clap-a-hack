@@ -23,10 +23,10 @@ export default function Room() {
     const [isVisible, setIsVisible] = useState<boolean>(false);
 
     useEffect(() => {
-        if (roomid && nickname !== 'Anonymous Fox' && !isVisible) {
+        if (roomid && nickname !== '' && !isVisible) {
             startConnection(roomid)
         }
-        if (nickname === 'Anonymous Fox')
+        if (nickname === '')
             setIsVisible(true)
 
     }, [roomid, nickname, isVisible])
