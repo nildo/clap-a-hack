@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components';
 import SplitterLayout from 'react-splitter-layout';
 import 'react-splitter-layout/lib/index.css';
@@ -7,6 +7,8 @@ import Main from './Main';
 import Sidebar from './Sidebar';
 import { AppContext } from '../../context/ContextProvider';
 import { useParams } from 'react-router-dom';
+import Modal from 'antd/lib/modal';
+import AddNickname from '../../components/AddNickname';
 
 const Wrapper = styled.div`
     width: 100vw;
@@ -15,15 +17,19 @@ const Wrapper = styled.div`
 
 export default function Room() {
 
-    const { startConnection } = useContext(AppContext);
+    const { startConnection, nickname } = useContext(AppContext);
     const { roomid } = useParams<{ roomid: string }>();
 
+    const [isVisible, setIsVisible] = useState<boolean>(false);
+
     useEffect(() => {
-        if (roomid) {
+        if (roomid && nickname !== 'Anonymous Fox' && !isVisible) {
             startConnection(roomid)
         }
-    }, [roomid])
+        if (nickname === 'Anonymous Fox')
+            setIsVisible(true)
 
+    }, [roomid, nickname, isVisible])
 
     return (
         <Wrapper>
@@ -35,6 +41,11 @@ export default function Room() {
                 <Main />
                 <Sidebar />
             </SplitterLayout>
+            <Modal visible={isVisible} cancelButtonProps={{ style: { visibility: 'hidden' } }}
+                onOk={() => setIsVisible(false)}
+            >
+                <AddNickname />
+            </Modal>
         </Wrapper>
     )
 };
