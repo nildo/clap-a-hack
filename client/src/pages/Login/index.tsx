@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Input, Button, Typography, notification } from 'antd';
+import ColorPicker from './ColorPicker';
+import { RGBColor } from './types';
 
 const { Title, Text } = Typography;
 
@@ -21,8 +23,14 @@ const Prompt = styled.div`
 `
 const Group = styled.div`
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     margin: 12px 0;
+`
+const Row = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 `
 const Notification = styled.div`
     display: flex;
@@ -45,40 +53,43 @@ export default function LoginPage() {
 
 function LoginPrompt() {
     const history = useHistory();
-    const [ nickname, setNickname ] = useState();
-    const [ roomName, setRoomName ] = useState();
-    const [ roomExists, setRoomExists ] = useState(undefined);
-    const [ roomNotExistingNotification, showRoomNotExistingNotification ] = useState(false);
+    const [ nickname, setNickname ] = useState('');
+    const [ roomName, setRoomName ] = useState('');
+    const [ roomExists, setRoomExists ] = useState<boolean | undefined>();
+    const [ userColor, setUserColor ] = useState<RGBColor>({
+        r: 255,
+        g: 0,
+        b: 0,
+        a: 100
+    });
 
-    const onNickChange = event => {
+    const onNickChange = (event: any) => {
         setNickname(event.target.value);
-        showRoomNotExistingNotification(false);
+        setRoomExists(undefined);
     }
-    const onRoomChange = event => {
+    const onRoomChange = (event: any) => {
         setRoomName(event.target.value);
-        showRoomNotExistingNotification(false);
+        setRoomExists(undefined);
     }
     const onNewRoomCreate = () => setRoomExists(true); // TODO this should actually create a room not just set state
     const onLoginClick = () => {
-        if (!nickname) 
+        if (!nickname?.length || !roomName?.length) {
+            const missing = [];
+            if (!nickname?.length) missing.push('nickname');
+            if (!roomName?.length) missing.push('room name');
             notification.warning({
                 message: "Couldn't proceed",
-                description: "You need to provide a nickname!"
-            });
-        if (!roomName) {
-            notification.warning({
-                message: "Couldn't proceed",
-                description: "You need to provide a room name!"
+                description: `You need to provide ${missing.join(' and ')} to be able to proceed!`
             });
         }
-        if (nickname && roomName) {
+        if (nickname.length && roomName.length) {
             if (!roomExists) 
-                showRoomNotExistingNotification(true);
+                setRoomExists(false);
         }
     }
 
     useEffect(() => {
-        if (roomExists === true) {
+        if (roomExists && roomName?.length) {
             notification.success({
                 message: "Yay!",
                 description: `You successfully joined a "${roomName.toUpperCase()}" room!`
@@ -90,18 +101,28 @@ function LoginPrompt() {
     }, [roomExists])
 
     return <Prompt>
-        <Title level={2}>Helloooooooo</Title>
+        <Title level={2} style={{ fontWeight: 600 }}>Helloooooooo</Title>
         <Group>
-            <Title level={5}>Write your name and pick color</Title>
-            <Input placeholder="Nickname" value={nickname} onChange={onNickChange}/>
+            <Title level={5} style={{ margin: 0, padding: 0}} >Write your name and pick color</Title>
+            <Row>
+                <Input 
+                    placeholder="Nickname" 
+                    value={nickname} 
+                    onChange={onNickChange} 
+                    style={{ 
+                        margin: '8px 12px 8px 0',
+                        color: `rgba(${userColor.r},${userColor.g},${userColor.b},${userColor.a})`
+                    }}/>
+                <ColorPicker userColor={userColor} setUserColor={setUserColor} />
+            </Row>
         </Group>
         <Group>
-            <Title level={5}>Enter room name</Title>
-            <Text secondary>Should be unique!</Text>
-            <Input placeholder="Room name" value={roomName} onChange={onRoomChange} />
+            <Title level={5} style={{ margin: 0, padding: 0 }} >Enter room name</Title>
+            <Text style={{ margin: 0, padding: 0 }} >Should be unique!</Text>
+            <Input placeholder="Room name" value={roomName} onChange={onRoomChange} style={{ margin: "8px 0" }} />
         </Group>
         <Group>
-            {roomNotExistingNotification && 
+            {roomExists === false && 
                 <Notification>
                     <Title level={5}>Didn't find a room :C</Title>
                     <Text>Create a new one or try again</Text>
