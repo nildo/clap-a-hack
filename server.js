@@ -1,9 +1,14 @@
 const express = require("express");
+const path = require('path');
 const socketIO = require("socket.io");
 
 const app = express();
 
 app.use(express.static("client/build"));
+
+app.get('*', function (request, response) {
+  response.sendFile(path.resolve(__dirname, 'client/build/index.html'));
+});
 
 const DEFAULT_COLOR = {
   r: 255,
