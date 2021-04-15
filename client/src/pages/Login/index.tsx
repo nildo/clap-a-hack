@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Input, Button, Typography, notification } from 'antd';
 import ColorPicker from './ColorPicker';
-import { RGBColor } from './types';
+import { AppContext } from '../../context/ContextProvider';
 
 const { Title, Text } = Typography;
 
@@ -53,15 +53,10 @@ export default function LoginPage() {
 
 function LoginPrompt() {
     const history = useHistory();
-    const [ nickname, setNickname ] = useState('');
-    const [ roomName, setRoomName ] = useState('');
-    const [ roomExists, setRoomExists ] = useState<boolean | undefined>();
-    const [ userColor, setUserColor ] = useState<RGBColor>({
-        r: 255,
-        g: 0,
-        b: 0,
-        a: 100
-    });
+
+    const { nickname, setNickname, userColor, setUserColor } = useContext(AppContext);
+    const [roomName, setRoomName] = useState('');
+    const [roomExists, setRoomExists] = useState<boolean | undefined>();
 
     const onNickChange = (event: any) => {
         setNickname(event.target.value);
@@ -83,7 +78,7 @@ function LoginPrompt() {
             });
         }
         if (nickname.length && roomName.length) {
-            if (!roomExists) 
+            if (!roomExists)
                 setRoomExists(false);
         }
     }
@@ -97,22 +92,22 @@ function LoginPrompt() {
             const standarizedRoomName = roomName.replace(' ', '');
             history.push(`/room/${standarizedRoomName}`);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomExists])
 
     return <Prompt>
         <Title level={2} style={{ fontWeight: 600 }}>Helloooooooo</Title>
         <Group>
-            <Title level={5} style={{ margin: 0, padding: 0}} >Write your name and pick color</Title>
+            <Title level={5} style={{ margin: 0, padding: 0 }} >Write your name and pick color</Title>
             <Row>
-                <Input 
-                    placeholder="Nickname" 
-                    value={nickname} 
-                    onChange={onNickChange} 
-                    style={{ 
+                <Input
+                    placeholder="Nickname"
+                    value={nickname}
+                    onChange={onNickChange}
+                    style={{
                         margin: '8px 12px 8px 0',
                         color: `rgba(${userColor.r},${userColor.g},${userColor.b},${userColor.a})`
-                    }}/>
+                    }} />
                 <ColorPicker userColor={userColor} setUserColor={setUserColor} />
             </Row>
         </Group>
@@ -122,7 +117,7 @@ function LoginPrompt() {
             <Input placeholder="Room name" value={roomName} onChange={onRoomChange} style={{ margin: "8px 0" }} />
         </Group>
         <Group>
-            {roomExists === false && 
+            {roomExists === false &&
                 <Notification>
                     <Title level={5}>Didn't find a room :C</Title>
                     <Text>Create a new one or try again</Text>
