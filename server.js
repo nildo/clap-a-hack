@@ -46,6 +46,7 @@ io.on("connection", (client) => {
       reactions: [],
       currentPresentation: -1,
       presentations: [],
+      resultsVisible: false,
     };
   }
 
@@ -88,13 +89,13 @@ io.on("connection", (client) => {
         ...rooms[room],
         soundLevel: {
           ...currentRoom.sound,
-          [type]: currentRoom.soundLevel[type] - 1 || 1,
+          [type]: (currentRoom.soundLevel[type] - 1 )|| 1,
         },
       };
-      io.emit("stateUpdate", rooms[room]);
+      io.to(room).emit("stateUpdate", rooms[room]);
     }, 3000);
 
-    io.emit("stateUpdate", rooms[room]);
+    io.to(room).emit("stateUpdate", rooms[room]);
   });
 
   client.on("disconnect", (data) => {
@@ -102,7 +103,7 @@ io.on("connection", (client) => {
       ...rooms[room],
       users: rooms[room].users.filter((user) => user.id !== client.id),
     };
-    io.emit("stateUpdate", rooms[room]);
+    io.to(room).emit("stateUpdate", rooms[room]);
   });
 
   client.on("addPresentation", (data) => {
@@ -122,7 +123,7 @@ io.on("connection", (client) => {
         },
       ],
     };
-    io.emit("stateUpdate", rooms[room]);
+    io.to(room).emit("stateUpdate", rooms[room]);
   });
 
   client.on("showResults", (data) => {
@@ -130,14 +131,14 @@ io.on("connection", (client) => {
       ...rooms[room],
       resultsVisible: true,
     };
-    io.emit("stateUpdate", rooms[room]);
+    io.to(room).emit("stateUpdate", rooms[room]);
   });
 });
 
-io.of("/").adapter.on("create-room", (room) => {
+io.on("create-room", (room) => {
   console.log(`room ${room} was created`);
 });
 
-io.of("/").adapter.on("join-room", (room, id) => {
+io.on("join-room", (room, id) => {
   console.log(`socket ${id} has joined room ${room}`);
 });
