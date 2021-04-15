@@ -126,6 +126,15 @@ io.on("connection", (client) => {
     io.to(room).emit("stateUpdate", rooms[room]);
   });
 
+  client.on("setActivePresentation", (data) => {
+    const { presentationIndex } = data;
+    rooms[room] = {
+      ...rooms[room],
+      currentPresentation: presentationIndex
+    };
+    io.emit("stateUpdate", rooms[room]);
+  });
+
   client.on("showResults", (data) => {
     rooms[room] = {
       ...rooms[room],

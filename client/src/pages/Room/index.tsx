@@ -16,7 +16,6 @@ const Wrapper = styled.div`
 `;
 
 export default function Room() {
-
     const { startConnection, nickname } = useContext(AppContext);
     const { roomid } = useParams<{ roomid: string }>();
 
