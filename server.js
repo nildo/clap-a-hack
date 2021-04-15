@@ -34,18 +34,22 @@ io.on("connection", (client) => {
   if (rooms[room]) {
     rooms[room] = {
       ...rooms[room],
-      users: [...rooms[room].users, { user, color: JSON.parse(color), id }],
+      users: [
+        ...rooms[room].users,
+        { user, color: JSON.parse(color), id, isAdmin: false },
+      ],
     };
   } else {
     rooms[room] = {
-      users: [{ user, color }],
-      soundLevel: {laugh: 0, clap: 0, boo:0},
+      users: [{ user, color, isAdmin: true, id }],
+      soundLevel: { laugh: 0, clap: 0, boo: 0 },
       reactions: [],
       currentPresentation: -1,
       presentations: [],
+      resultsVisible: false,
     };
   }
-  console.table(rooms);
+
   client.join(room);
 
   io.emit("stateUpdate", rooms[room]);
@@ -56,11 +60,15 @@ io.on("connection", (client) => {
     const { currentPresentation } = currentRoom;
 
     let updatedPresentations = [...currentRoom.presentations];
-    if (currentPresentation !== -1)
+    if (currentPresentation !== -1) {
       updatedPresentations[currentPresentation] = {
         ...updatedPresentations[currentPresentation],
-        [type]: updatedPresentations[currentPresentation][type] + 1,
+        reactions: {
+          ...updatedPresentations[currentPresentation].reactions,
+          [type]: (updatedPresentations[currentPresentation].reactions[type] || 0) + 1,
+        },
       };
+    }
 
     rooms[room] = {
       ...currentRoom,
@@ -72,9 +80,9 @@ io.on("connection", (client) => {
       soundLevel: {
         ...currentRoom.soundLevel,
        [type]: currentRoom.soundLevel[type] + 1,
-      }
+      },
     };
-   
+
     setTimeout(() => {
       rooms[room] = {
         ...rooms[room],
@@ -82,11 +90,11 @@ io.on("connection", (client) => {
           ...rooms[room].soundLevel,
         [type]: (rooms[room].soundLevel[type] - 1 > 0) ? rooms[room].soundLevel[type] - 1 : 0,
         },
-      }
-      io.emit("stateUpdate", rooms[room]);
-    }, 3000)
+      };
+      io.to(room).emit("stateUpdate", rooms[room]);
+    }, 3000);
 
-    io.emit("stateUpdate", rooms[room]);
+    io.to(room).emit("stateUpdate", rooms[room]);
   });
 
   client.on("disconnect", (data) => {
@@ -94,20 +102,34 @@ io.on("connection", (client) => {
       ...rooms[room],
       users: rooms[room].users.filter((user) => user.id !== client.id),
     };
-    io.emit("stateUpdate", rooms[room]);
+    io.to(room).emit("stateUpdate", rooms[room]);
   });
 
   client.on("addPresentation", (data) => {
     const { name } = data;
     rooms[room] = {
       ...rooms[room],
+      currentPresentation: rooms[room].currentPresentation + 1,
       presentations: [
         ...rooms[room].presentations,
         {
           name,
-          reactions: {}
-        }
-      ]
+          reactions: {
+            clap: 0,
+            laugh: 0,
+            boo: 0,
+          },
+        },
+      ],
+    };
+    io.to(room).emit("stateUpdate", rooms[room]);
+  });
+
+  client.on("setActivePresentation", (data) => {
+    const { presentationIndex } = data;
+    rooms[room] = {
+      ...rooms[room],
+      currentPresentation: presentationIndex
     };
     io.emit("stateUpdate", rooms[room]);
   });
@@ -115,16 +137,16 @@ io.on("connection", (client) => {
   client.on("showResults", (data) => {
     rooms[room] = {
       ...rooms[room],
-      resultsVisible: true
+      resultsVisible: true,
     };
-    io.emit("stateUpdate", rooms[room]);
+    io.to(room).emit("stateUpdate", rooms[room]);
   });
 });
 
-io.of("/").adapter.on("create-room", (room) => {
+io.on("create-room", (room) => {
   console.log(`room ${room} was created`);
 });
 
-io.of("/").adapter.on("join-room", (room, id) => {
+io.on("join-room", (room, id) => {
   console.log(`socket ${id} has joined room ${room}`);
 });

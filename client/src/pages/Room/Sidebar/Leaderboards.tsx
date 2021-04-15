@@ -20,6 +20,7 @@ const Place = styled.div.attrs(({ winner } : { winner: boolean }) => {
     max-height: 32px;
     border: 2px solid black;
     border-radius: 20px;
+    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,11 +36,11 @@ const PresentationList = styled.div`
     display: flex;
     flex-direction: column;
 `
-const Presentation = styled.div.attrs(({ active } : { active: boolean }) => {
+const Presentation = styled.div.attrs(({ isActive } : { isActive: boolean }) => {
     const style: any = { backround: 'transparent' };
-    if (active) style.background = "#FFF1CC"; 
+    if (isActive) style.background = "#FFF1CC"; 
     return { style }
-})`
+})<{isActive: boolean}>`
     display: flex;
     flex-direction: row;
     padding: 12px;
@@ -52,35 +53,40 @@ const Presentation = styled.div.attrs(({ active } : { active: boolean }) => {
 `
 
 export default function Leaderboards(): JSX.Element {
-    const { roomState } = useContext(AppContext);
+    const { roomState, socket } = useContext(AppContext);
+    const currentPresentation = roomState?.currentPresentation ?? 0;
+    const isAdmin = true;
     const resultsVisible = roomState?.resultsVisible;
     const presentationList = resultsVisible 
         ? roomState?.presentations
             .map((presentation: any) => {
                 const reactions = Object.values(presentation.reactions) ?? [];
-                const sumOfAllReactions = reactions.reduce((accumulator: number, reaction: any) => {
-                    if (reaction?.number)
-                        return accumulator + Number(reaction.number);
-                    return accumulator;
-                }, 0) ?? 0;
+                const points = reactions.reduce((sum: number, point: any) => sum + point, 0) ?? 0;
                 return {
                     ...presentation,
-                    points: sumOfAllReactions
+                    points
                 };
             }) ?? []
         : roomState?.presentations ?? [];
 
+    const onPresentationClick = (presentationIndex: number) => {
+        if (isAdmin) {
+            socket?.emit('setActivePresentation', { presentationIndex })
+        }
+    };
+
     const presentations = presentationList.map((presentation: any, index: number) => {
         const isWinner = index === 0;
+        const reactions = presentation.reactions ?? {};
         return (
             <Tooltip title={presentation.name} placement="left">
-                <Presentation>
-                    <Place winner={isWinner}>{resultsVisible && isWinner ? '🏆' : index + 1}</Place>
+                <Presentation isActive={index === currentPresentation} onClick={() => onPresentationClick(index)}>
+                    <Place winner={resultsVisible && isWinner}>{resultsVisible && isWinner ? '🏆' : index + 1}</Place>
                     <Flex column>
                         <Title level={5} style={{ overflow: 'hidden'}}>
                             {presentation.name?.length > 30 ? presentation.name?.substring(0,27) + '...' : presentation.name}
                         </Title>
-                        {resultsVisible && <ReactionSummary presentationId={presentation.id } />}
+                        {resultsVisible && <ReactionSummary reactions={reactions} />}
                     </Flex>
                 </Presentation>
             </Tooltip>

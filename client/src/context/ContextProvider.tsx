@@ -62,6 +62,13 @@ const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
       })
     })
 
+    socket?.on('setActivePresentation', (index: number) => {
+      setRoomState({
+        ...roomState,
+        currentPresentation: index
+      })
+    })
+
     socket?.on('showResults', () => {
       setRoomState({
         ...roomState,

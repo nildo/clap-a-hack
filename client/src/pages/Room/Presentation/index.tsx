@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Typography } from 'antd';
 import { AppContext } from '../../../context/ContextProvider';
@@ -21,9 +21,10 @@ const Wrapper = styled.div`
 
 export default function Presentation() {
     const { roomState } = useContext(AppContext);
-    console.log(roomState)
+    const presentationTitle = roomState?.presentations[roomState?.currentPresentation]?.name 
+        ?? '404 PRESENTATION NOT FOUND';
     return (<Wrapper>
-        <Title level={3}>Volumes</Title>
+        <Title level={1}>{ presentationTitle }</Title>
         <Title level={5}>Share your reactions 🔥</Title>
     </Wrapper>)
 }

@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
-
 import styled from 'styled-components';
 import ColorPicker from '../pages/Login/ColorPicker';
-import { Input, Typography } from 'antd';
+import { Input, Typography, notification } from 'antd';
 import { AppContext } from '../context/ContextProvider';
 
 const { Title } = Typography;
@@ -12,7 +11,13 @@ const AddNickname = () => {
   const { nickname, setNickname, userColor, setUserColor } = useContext(AppContext);
 
   const onNickChange = (event: any) => {
-    setNickname(event.target.value);
+    const nick = event.target.value;
+    if (!nick)
+      notification.warning({
+        message: ">:C",
+        description: "You need to provide a nickname!!!"
+      });
+    else setNickname(nick);
   }
 
   return (
