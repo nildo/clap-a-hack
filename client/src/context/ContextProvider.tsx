@@ -1,7 +1,7 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { RGBColor } from 'react-color';
 import { io } from 'socket.io-client';
-import { ContextState } from './types';
+import { ContextState, RoomState } from './types';
 
 
 
@@ -12,6 +12,14 @@ const DEFAULT_COLOR = {
   a: 100
 };
 
+const DEFAULT_ROOM_STATE = {
+  currentPresentation: -1,
+  presentations: [],
+  reactions: {},
+  users: [],
+};
+
+
 const defaultState: ContextState = {
   socket: undefined,
   startConnection: () => undefined,
@@ -19,6 +27,7 @@ const defaultState: ContextState = {
   setNickname: () => undefined,
   setUserColor: () => undefined,
   userColor: DEFAULT_COLOR,
+  roomState: DEFAULT_ROOM_STATE
 };
 
 export const AppContext = createContext<ContextState>(defaultState);
@@ -27,17 +36,27 @@ const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
 
   const [socket, setSocket] = useState<ContextState['socket']>();
 
-  const [nickname, setNickname] = useState('');
+  const [nickname, setNickname] = useState('Anonymous Fox');
   const [userColor, setUserColor] = useState<RGBColor>(DEFAULT_COLOR);
+
+  const [roomState, setRoomState] = useState<RoomState>(DEFAULT_ROOM_STATE);
 
   const startConnection = (roomId: string) => {
     const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '';
-    const newSocket = io(host, { query: { room: roomId, user: nickname, color: userColor } });
+    const newSocket = io(host, { query: { room: roomId, user: nickname, color: JSON.stringify(userColor) } });
     setSocket(newSocket)
   }
 
+
+  useEffect(() => {
+    socket?.on('stateUpdate', (data: any) => {
+      setRoomState(data);
+      console.log("Data", data)
+    });
+  }, [socket]);
+
   return (
-    <AppContext.Provider value={{ socket, startConnection, nickname, setNickname, userColor, setUserColor }}>
+    <AppContext.Provider value={{ socket, startConnection, nickname, setNickname, userColor, setUserColor, roomState }}>
       {children}
     </AppContext.Provider>
   )

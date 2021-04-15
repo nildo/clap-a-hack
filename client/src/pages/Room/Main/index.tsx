@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 `;
 
 export default function Main() {
-    const { roomid } = useParams<{roomid: string}>()
+    const { roomid } = useParams<{ roomid: string }>()
     const presentationId = 1; // TODO mock
 
     return (
