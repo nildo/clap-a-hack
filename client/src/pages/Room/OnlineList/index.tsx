@@ -27,6 +27,7 @@ const OnlineUser = styled.div.attrs(({ userColor }: { userColor: RGBColor }) => 
 
 export default function OnlineList() {
     const { roomState } = useContext(AppContext);
+    console.log(roomState)
     const mappedAdmins = roomState?.users
         .filter((user: any) => user.isAdmin)
         .map((user: any) => 

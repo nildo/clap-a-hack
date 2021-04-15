@@ -36,7 +36,6 @@ const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
 
   const [nickname, setNickname] = useState('Anonymous Fox');
   const [userColor, setUserColor] = useState<RGBColor>(DEFAULT_COLOR);
-
   const [roomState, setRoomState] = useState<RoomState>(DEFAULT_ROOM_STATE);
 
   const startConnection = (roomId: string) => {
