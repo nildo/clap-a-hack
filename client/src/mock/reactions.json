@@ -1,0 +1,14 @@
+[
+    {
+        "emoji": "👏",
+        "action": "clap"
+    },
+    {
+        "emoji": "😂",
+        "action": "laugh"
+    },
+    {
+        "emoji": "🍅",
+        "action": "boo"
+    }
+]
