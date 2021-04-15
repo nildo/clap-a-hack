@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { Typography, Input, Button, Popconfirm, notification } from 'antd';
 import Flex from '../../../components/Flex';
+import { AppContext } from '../../../context/ContextProvider';
 import Leaderboards from './Leaderboards';
 
 const { Title } = Typography;
@@ -18,14 +19,15 @@ const Wrapper = styled.div`
 `
 
 export default function Sidebar() {
-    const isAdmin = true;
+    const { socket } = useContext(AppContext);
+    const isAdmin = true; // TODO
     const [presentationTitle, setPresentationTitle] = useState('');
 
     const onChangePresentationTitle = (event: any) => 
         setPresentationTitle(event.target.value);
     const onNewPresentationAdd = () => {
+        socket?.emit('addPresentation', { name: presentationTitle });
         notification.success({ message: 'Yay!', description: 'New presentation added!' });
-        // TODO send new title to socket or somewhere
     }
     const onShowVotingResults = () => {
         alert('It is done.');

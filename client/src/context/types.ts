@@ -9,6 +9,7 @@ export type RoomState = {
   presentations: Array<{name : string, reactions: ReactionCount}>
   reactions: ReactionCount,
   users: Array<{ user: string, color: RGBColor, id: string}>,
+  resultsVisible: boolean,
 }
 
 export type ContextState = {

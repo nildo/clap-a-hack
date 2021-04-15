@@ -7,7 +7,7 @@
   "description": "A simple Node app built on Express, instantly up and running.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "env PORT=3001 node server.js",
     "watch": "env PORT=3001 nodemon server.js"
   },
   "dependencies": {

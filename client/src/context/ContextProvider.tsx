@@ -15,6 +15,7 @@ const DEFAULT_ROOM_STATE = {
   presentations: [],
   reactions: {},
   users: [],
+  resultsVisible: false
 };
 
 
@@ -25,15 +26,13 @@ const defaultState: ContextState = {
   setNickname: () => undefined,
   setUserColor: () => undefined,
   userColor: DEFAULT_COLOR,
-  roomState: DEFAULT_ROOM_STATE
+  roomState: DEFAULT_ROOM_STATE,
 };
 
 export const AppContext = createContext<ContextState>(defaultState);
 
 const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
-
   const [socket, setSocket] = useState<ContextState['socket']>();
-
   const [nickname, setNickname] = useState('Anonymous Fox');
   const [userColor, setUserColor] = useState<RGBColor>(DEFAULT_COLOR);
   const [roomState, setRoomState] = useState<RoomState>(DEFAULT_ROOM_STATE);
@@ -44,12 +43,32 @@ const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
     setSocket(newSocket)
   }
 
-
   useEffect(() => {
     socket?.on('stateUpdate', (data: any) => {
       setRoomState(data);
       console.log("Data", data)
     });
+
+    socket?.on('addPresentation', (name: string) => {
+      setRoomState({
+        ...roomState,
+        presentations: [
+          ...roomState.presentations,
+          {
+            name,
+            reactions: {}
+          }
+        ]
+      })
+    })
+
+    socket?.on('showResults', () => {
+      setRoomState({
+        ...roomState,
+        resultsVisible: true
+      })
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   return (

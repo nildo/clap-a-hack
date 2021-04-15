@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Typography, Tooltip } from 'antd';
+import { AppContext } from '../../../context/ContextProvider';
 import Flex from '../../../components/Flex';
 import ReactionSummary from '../ReactionSummary';
 
@@ -57,15 +58,16 @@ const Presentation = styled.div.attrs(({ active } : { active: boolean }) => {
 `
 
 export default function Leaderboards(): JSX.Element {
-    const presentationList = presentations.map((presentation: any, index: number) => {
+    const { roomState } = useContext(AppContext);
+    const presentationList = roomState?.presentations.map((presentation: any, index: number) => {
         const isWinner = index === 0;
         return (
-            <Tooltip title={presentation.title} placement="left">
+            <Tooltip title={presentation.name} placement="left">
                 <Presentation>
                     <Place winner={isWinner}>{isWinner ? '🏆' : index + 1}</Place>
                     <Flex column>
                         <Title level={5} style={{ overflow: 'hidden'}}>
-                            {presentation.title.length > 30 ? presentation.title.substring(0,27) + '...' : presentation.title}
+                            {presentation.name?.length > 30 ? presentation.name?.substring(0,27) + '...' : presentation.name}
                         </Title>
                         <ReactionSummary presentationId={presentation.id }/>
                     </Flex>
