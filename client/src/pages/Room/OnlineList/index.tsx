@@ -26,14 +26,14 @@ export default function OnlineList() {
     const { roomState } = useContext(AppContext);
     const mappedAdmins = () => roomState?.users
         .filter((user: any) => user.isAdmin)
-        .map((user: any) => 
+        .map((user: any) =>
             <OnlineUser key={user.id} userColor={user.color || DEFAULT_COLOR}>@{user.user}</OnlineUser>
-    );
+        );
     const mappedUsers = () => roomState?.users
         .filter((user: any) => !user.isAdmin)
-        .map((user: any) => 
+        .map((user: any) =>
             <OnlineUser key={user.id} userColor={user.color || DEFAULT_COLOR}>@{user.user}</OnlineUser>
-    );
+        );
 
     return (
         <Flex column>
