@@ -71,7 +71,7 @@ io.on("connection", (client) => {
       },
       soundLevel: {
         ...currentRoom.sound,
-       type: currentRoom.soundLevel[type] < 25 ? currentRoom.soundLevel[type] + 1 : 25,
+       type: currentRoom.soundLevel[type] +1,
       }
     };
    
