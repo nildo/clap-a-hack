@@ -61,14 +61,10 @@ export default function Leaderboards(): JSX.Element {
         ? roomState?.presentations
             .map((presentation: any) => {
                 const reactions = Object.values(presentation.reactions) ?? [];
-                const sumOfAllReactions = reactions.reduce((accumulator: number, reaction: any) => {
-                    if (reaction?.number)
-                        return accumulator + Number(reaction.number);
-                    return accumulator;
-                }, 0) ?? 0;
+                const points = reactions.reduce((sum: number, point: any) => sum + point, 0) ?? 0;
                 return {
                     ...presentation,
-                    points: sumOfAllReactions
+                    points
                 };
             }) ?? []
         : roomState?.presentations ?? [];
