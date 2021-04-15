@@ -19,12 +19,21 @@ const Wrapper = styled.div`
     padding: 40px;
 `;
 
-export default function Presentation() {
+export default function Presentation({ winner }: { winner: string }) {
     const { roomState } = useContext(AppContext);
-    const presentationTitle = roomState?.presentations[roomState?.currentPresentation]?.name 
+    const presentationTitle = roomState?.presentations[roomState?.currentPresentation]?.name
         ?? '404 PRESENTATION NOT FOUND';
-    return (<Wrapper>
-        <Title level={1}>{ presentationTitle }</Title>
-        <Title level={5}>Share your reactions 🔥</Title>
-    </Wrapper>)
+
+    if (!roomState.resultsVisible)
+        return (<Wrapper>
+            <Title level={1}>{presentationTitle}</Title>
+            <Title level={5}>Share your reactions 🔥</Title>
+        </Wrapper>)
+    
+    return (
+        <Wrapper>
+        <Title level={1}>WINNER IS: {winner} 🏆🏆🏆🏆</Title>
+        <Title level={5}>Nicely done 🔥</Title>
+        </Wrapper>
+    )
 }

@@ -52,7 +52,7 @@ io.on("connection", (client) => {
 
   client.join(room);
 
-  io.emit("stateUpdate", rooms[room]);
+  io.to(room)o.emit("stateUpdate", rooms[room]);
 
   client.on("reaction", (data) => {
     const { type } = data;
@@ -131,7 +131,7 @@ io.on("connection", (client) => {
       ...rooms[room],
       currentPresentation: presentationIndex
     };
-    io.emit("stateUpdate", rooms[room]);
+    io.to(room).emit("stateUpdate", rooms[room]);
   });
 
   client.on("makeAdmin", (data) => {
