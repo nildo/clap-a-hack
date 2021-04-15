@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
-import { io } from 'socket.io-client';
 import ReactAudioPlayer from 'react-audio-player';
+import { useParams } from 'react-router-dom';
+import { AppContext } from '../../context/ContextProvider';
+
 
 console.log(process.env.NODE_ENV === 'development');
 
-const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '';
 
-const socket = io(host);
 
 const MULTIPLIER = 3;
 
 function Room() {
+
   const [state, setState] = useState({
     numOnlineUsers: 0,
     laughCount: 0,
@@ -21,11 +23,23 @@ function Room() {
   const [playing3, setPlaying3] = useState(false);
   const [playing4, setPlaying4] = useState(false);
 
+  const { socket, startConnection } = useContext(AppContext);
+
+  const { id } = useParams<{ id: string }>();
+
+
   useEffect(() => {
-    socket.on('stateUpdate', (data: any) => {
+    if (id) {
+      startConnection(id)
+    }
+  }, [id])
+
+
+  useEffect(() => {
+    socket?.on('stateUpdate', (data: any) => {
       setState(data);
     });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     const { numOnlineUsers, laughCount } = state;
@@ -54,7 +68,7 @@ function Room() {
   }, [playing1, playing2, playing3, playing4, state])
 
   const sendClick = () => {
-    socket.emit('laugh');
+    socket?.emit('laugh');
   }
 
   const { numOnlineUsers, laughCount } = state;
@@ -69,10 +83,10 @@ function Room() {
         <Column>Laughs:</Column>
         <Column>{laughCount}</Column>
       </Row>
-      {playing1 && <ReactAudioPlayer src="laugh-01.mp3" autoPlay/>}
-      {playing2 && <ReactAudioPlayer src="laugh-02.mp3" autoPlay/>}
-      {playing3 && <ReactAudioPlayer src="laugh-03.mp3" autoPlay/>}
-      {playing4 && <ReactAudioPlayer src="clap.mp3" autoPlay/>}
+      {playing1 && <ReactAudioPlayer src="laugh-01.mp3" autoPlay />}
+      {playing2 && <ReactAudioPlayer src="laugh-02.mp3" autoPlay />}
+      {playing3 && <ReactAudioPlayer src="laugh-03.mp3" autoPlay />}
+      {playing4 && <ReactAudioPlayer src="clap.mp3" autoPlay />}
     </Wrapper>
   );
 }

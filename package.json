@@ -11,6 +11,7 @@
     "watch": "env PORT=3001 nodemon server.js"
   },
   "dependencies": {
+    "@types/react-router-dom": "^5.1.7",
     "antd": "^4.15.1",
     "express": "^4.17.1",
     "react-router-dom": "^5.2.0",
