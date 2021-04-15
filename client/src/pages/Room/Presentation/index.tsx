@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { Typography } from 'antd';
+import { AppContext } from '../../../context/ContextProvider';
 
 const { Title } = Typography;
 
@@ -19,9 +20,9 @@ const Wrapper = styled.div`
 `;
 
 export default function Presentation() {
-    const [ currentPresentationTitle, setCurrentPresentationTitle ] = useState('This is a sample title!');
-    return <Wrapper>
-        <Title level={3}>{currentPresentationTitle}</Title>
+    const { roomState } = useContext(AppContext);
+    return (<Wrapper>
+        <Title level={3}>Volume{roomState?.soundLevel}</Title>
         <Title level={5}>Share your reactions 🔥</Title>
-    </Wrapper>
+    </Wrapper>)
 }
