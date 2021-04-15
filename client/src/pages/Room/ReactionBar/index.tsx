@@ -20,8 +20,7 @@ export default function ReactionBar() {
             <div style={{ margin: '20px' }} onClick={() => onReactionClick(reaction.id)}
             >
                 <ClapButton
-                    size={100}
-                    iconComponent={() => <h1 style={{ fontSize: '50px', marginBottom: '10px' }}>{reaction.emoji}</h1>}
+                    iconComponent={() => <div style={{ fontSize: 40 }}>{reaction.emoji}</div>}
                 />
             </div>
         )
