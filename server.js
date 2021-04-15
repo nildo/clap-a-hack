@@ -70,18 +70,17 @@ io.on("connection", (client) => {
         [type]: (currentRoom.reactions[type] || 0) + 1,
       },
       soundLevel: {
-        ...currentRoom.sound,
-       type: currentRoom.soundLevel[type] +1,
+        ...currentRoom.soundLevel,
+       [type]: currentRoom.soundLevel[type] + 1,
       }
     };
    
     setTimeout(() => {
-      const currentSoundLevel = rooms[room].soundLevel;
       rooms[room] = {
         ...rooms[room],
         soundLevel: {
-          ...currentRoom.sound,
-         type: currentRoom.soundLevel[type] - 1 || 1,
+          ...rooms[room].soundLevel,
+        [type]: (rooms[room].soundLevel[type] - 1 > 0) ? rooms[room].soundLevel[type] - 1 : 0,
         },
       }
       io.emit("stateUpdate", rooms[room]);

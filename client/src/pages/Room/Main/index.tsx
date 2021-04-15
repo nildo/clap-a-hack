@@ -32,7 +32,7 @@ export default function Main() {
             <Presentation />
             <ReactionBar />
             <OnlineList />
-            <Sound soundLevels={{ laugh: 3 }}/>
+            <Sound />
         </Wrapper>
     )
 }
