@@ -29,12 +29,12 @@ export default function ReactionSummary(props: Props) {
         const emoji = reactions.find(reaction => reaction.id === currentReaction.id)?.emoji;
         return (
             <Flex row style={{ margin: '0 4px'}}>{emoji}
-            {resultsVisible ? currentReaction?.number : '???'}</Flex>
+            {currentReaction?.number}</Flex>
         )
     })
     return (
         <Wrapper>
-            { mappedReactions }
+            { resultsVisible && mappedReactions }
         </Wrapper>
     )
 }
