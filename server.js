@@ -65,7 +65,7 @@ io.on("connection", (client) => {
         ...updatedPresentations[currentPresentation],
         reactions: {
           ...updatedPresentations[currentPresentation].reactions,
-          [type]: (updatedPresentations[currentPresentation][type] || 0) + 1,
+          [type]: (updatedPresentations[currentPresentation].reactions[type] || 0) + 1,
         },
       };
     }
@@ -79,7 +79,7 @@ io.on("connection", (client) => {
       },
       soundLevel: {
         ...currentRoom.sound,
-        type: currentRoom.soundLevel[type] + 1,
+        [type]: currentRoom.soundLevel[type] + 1,
       },
     };
 
