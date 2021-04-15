@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Input, Button, Typography, notification } from 'antd';
 import ColorPicker from './ColorPicker';
-import { RGBColor } from './types';
+import { RGBColor } from '../../types';
 
 const { Title, Text } = Typography;
 

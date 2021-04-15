@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SketchPicker } from 'react-color';
 import { ColorSwatch, ColorPreview, ColorPickPopover, ColorPickCover } from './components';
-import { RGBColor } from './types';
+import { RGBColor } from '../../types';
 
 type Props = {
   userColor: RGBColor,

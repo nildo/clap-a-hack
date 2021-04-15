@@ -14,6 +14,7 @@ const Wrapper = styled.div`
     padding: 40px;
     display: flex;
     flex-direction: column;
+    height: 100vh;
 `;
 
 export default function Main() {
