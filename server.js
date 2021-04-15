@@ -139,7 +139,7 @@ io.on("connection", (client) => {
   client.on("showResults", (data) => {
     rooms[room] = {
       ...rooms[room],
-      resultsVisible: true,
+      resultsVisible: !rooms[room].resultsVisible,
     };
     io.to(room).emit("stateUpdate", rooms[room]);
   });

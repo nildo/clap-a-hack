@@ -69,10 +69,10 @@ const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
       })
     })
 
-    socket?.on('showResults', () => {
+    socket?.on('showResults', (show: boolean) => {
       setRoomState({
         ...roomState,
-        resultsVisible: true
+        resultsVisible: show
       })
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps

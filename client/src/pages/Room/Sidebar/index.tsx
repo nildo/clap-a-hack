@@ -19,7 +19,8 @@ const Wrapper = styled.div`
 `
 
 export default function Sidebar() {
-    const { socket } = useContext(AppContext);
+    const { socket, roomState } = useContext(AppContext);
+    const resultsVisible = roomState?.resultsVisible;
     const isAdmin = true; // TODO
     const [presentationTitle, setPresentationTitle] = useState('');
 
@@ -31,7 +32,7 @@ export default function Sidebar() {
         setPresentationTitle('');
     }
     const onShowVotingResults = () => {
-        socket?.emit('showResults');
+        socket?.emit('showResults', { show: !resultsVisible });
     }
 
     return (
@@ -51,14 +52,14 @@ export default function Sidebar() {
                     <Flex column style={{ margin: '12px 0'}}>
                         <Title level={4}>Show voting results</Title>
                         <Popconfirm
-                            title="Are you ABSOLUTELY SURE you want to show voting results? THERE IS NO GOING BACK!!"
+                            title={`Are you ABSOLUTELY SURE you want to ${ resultsVisible ? 'hide' : 'show'} voting results?`}
                             onConfirm={onShowVotingResults}
                             onCancel={() => {}}
                             okText="Do eet"
                             cancelText="Nope :c"
                             placement="left"
                         >
-                            <Button type="primary" danger >Show</Button>
+                            <Button type="primary" danger>{resultsVisible ? 'Hide' : "Show"}</Button>
                         </Popconfirm>
                     </Flex>
                 </Flex>

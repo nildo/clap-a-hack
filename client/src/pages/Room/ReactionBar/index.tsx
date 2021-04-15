@@ -29,7 +29,6 @@ export default function ReactionBar() {
     const { socket } = useContext(AppContext);
 
     const onReactionClick = (reactionType: string) => {
-        console.log("hi", socket)
         socket?.emit('reaction', { type: reactionType });
     }
     const mappedReactions = reactions.map((reaction) => {

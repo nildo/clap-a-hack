@@ -66,7 +66,8 @@ export default function Leaderboards(): JSX.Element {
                     ...presentation,
                     points
                 };
-            }) ?? []
+            })
+            .sort((a: any, b: any) => b.points - a.points) ?? []
         : roomState?.presentations ?? [];
 
     const onPresentationClick = (presentationIndex: number) => {
