@@ -75,7 +75,7 @@ export default function Leaderboards(): JSX.Element {
         return (
             <Tooltip title={presentation.name} placement="left">
                 <Presentation>
-                    <Place winner={isWinner}>{resultsVisible && isWinner ? '🏆' : index + 1}</Place>
+                    <Place winner={resultsVisible && isWinner}>{resultsVisible && isWinner ? '🏆' : index + 1}</Place>
                     <Flex column>
                         <Title level={5} style={{ overflow: 'hidden'}}>
                             {presentation.name?.length > 30 ? presentation.name?.substring(0,27) + '...' : presentation.name}
