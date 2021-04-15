@@ -51,7 +51,7 @@ export default function Sidebar() {
                     <Flex column style={{ margin: '12px 0'}}>
                         <Title level={4}>Show voting results</Title>
                         <Popconfirm
-                            title="Are you ABSOLUTELY SURE you want to show voting results?"
+                            title="Are you ABSOLUTELY SURE you want to show voting results? THERE IS NO GOING BACK!!"
                             onConfirm={onShowVotingResults}
                             onCancel={() => {}}
                             okText="Do eet"

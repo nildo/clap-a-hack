@@ -25,7 +25,7 @@ export default function Presentation() {
         ?? '404 PRESENTATION NOT FOUND';
     console.log(roomState)
     return (<Wrapper>
-        <Title level={3}>{ presentationTitle }</Title>
+        <Title level={1}>{ presentationTitle }</Title>
         <Title level={5}>Share your reactions 🔥</Title>
     </Wrapper>)
 }
