@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { RGBColor } from './types';
+import { RGBColor } from '../../types';
 
 export const ColorSwatch = styled.div`
   padding: 5px;
