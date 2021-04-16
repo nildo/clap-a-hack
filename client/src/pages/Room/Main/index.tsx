@@ -9,7 +9,6 @@ import Presentation from '../Presentation';
 import ReactionBar from '../ReactionBar';
 import OnlineList from '../OnlineList';
 import Sound from '../Sound';
-import Confetti from "react-confetti";
 
 const { Title, Text } = Typography;
 
@@ -40,11 +39,6 @@ export default function Main() {
 
     return (
         <Wrapper>
-            {roomState?.resultsVisible && <Confetti
-                gravity={0.05}
-                run={!!roomState?.resultsVisible}
-                numberOfPieces={400}
-            />}
             <Text>Room ID:</Text>
             <Flex row style={{ justifyContent: "space-between" }}>
                 <Title level={3}>{roomid}</Title>

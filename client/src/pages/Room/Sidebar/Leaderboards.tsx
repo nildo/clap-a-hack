@@ -1,56 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Typography, Tooltip } from 'antd';
+import { Typography, Tooltip, Button, Popconfirm } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 import { AppContext } from '../../../context/ContextProvider';
 import Flex from '../../../components/Flex';
 import ReactionSummary from '../ReactionSummary';
+import { Place, PresentationList, Presentation } from './components';
 
 const { Title } = Typography;
-
-const Place = styled.div.attrs(({ winner } : { winner: boolean }) => {
-    const style: any = {};
-    if (winner) {
-        style.border = '2px solid #E08506';
-    }
-    return { style };
-})<{winner: boolean}>`
-    min-width: 32px;
-    min-height: 32px;
-    max-width: 32px;
-    max-height: 32px;
-    border: 2px solid black;
-    border-radius: 20px;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 0;
-    margin-right: 8px;
-`;
-
-const PresentationList = styled.div`
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-`
-const Presentation = styled.div.attrs(({ isActive } : { isActive: boolean }) => {
-    const style: any = { backround: 'transparent' };
-    if (isActive) style.background = "#FFF1CC"; 
-    return { style }
-})<{isActive: boolean}>`
-    display: flex;
-    flex-direction: row;
-    padding: 12px;
-    border-radius: 12px;
-    margin: 8px 0;
-    cursor: pointer;
-    &:hover {
-        background: white;
-    }
-`
 
 export default function Leaderboards(): JSX.Element {
     const { roomState, socket, getIsAdmin } = useContext(AppContext);
@@ -76,6 +32,11 @@ export default function Leaderboards(): JSX.Element {
             socket?.emit('setActivePresentation', { presentationIndex })
         }
     };
+    const onPresentationDeleteClick = (presentationIndex: number) => {
+        if (isAdmin) {
+            socket?.emit('deletePresentation', { presentationIndex })
+        }
+    };
 
     useEffect(() => {
         const isUserAdmin = getIsAdmin();
@@ -90,13 +51,31 @@ export default function Leaderboards(): JSX.Element {
         return (
             <Tooltip title={presentation.name} placement="left">
                 <Presentation isActive={index === currentPresentation} onClick={() => onPresentationClick(index)}>
-                    <Place winner={resultsVisible && isWinner}>{resultsVisible && isWinner ? '🏆' : index + 1}</Place>
-                    <Flex column>
-                        <Title level={5} style={{ overflow: 'hidden'}}>
-                            {presentation.name?.length > 30 ? presentation.name?.substring(0,27) + '...' : presentation.name}
-                        </Title>
-                        <ReactionSummary reactions={reactions} />
+                    <Flex row>
+                        <Place winner={resultsVisible && isWinner}>{resultsVisible && isWinner ? '🏆' : index + 1}</Place>
+                        <Flex column>
+                            <Title level={5} style={{ overflow: 'hidden'}}>
+                                {presentation.name?.length > 30 ? presentation.name?.substring(0,27) + '...' : presentation.name}
+                            </Title>
+                            <ReactionSummary reactions={reactions} />
+                        </Flex>
                     </Flex>
+                    { isAdmin && 
+                        <Popconfirm
+                            title={`Are you ABSOLUTELY SURE you want to DELETE this presentation FOREVER?`}
+                            onConfirm={() => onPresentationDeleteClick(index)}
+                            onCancel={() => {}}
+                            okText="Do eet"
+                            cancelText="Nope :c"
+                            placement="left"
+                        >
+                            <Button 
+                                shape="circle" 
+                                type="primary" 
+                                icon={<DeleteOutlined />}
+                                danger />
+                        </Popconfirm>
+                    }
                 </Presentation>
             </Tooltip>
         )

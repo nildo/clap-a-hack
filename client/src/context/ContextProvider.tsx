@@ -41,6 +41,8 @@ const AppContextProvider = ({ children }: { children: React.ReactChild }) => {
   const startConnection = (roomId: string) => {
     const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : '';
     const newSocket = io(host, { query: { room: roomId, user: nickname, color: JSON.stringify(userColor) } });
+    console.log(userColor)
+    console.log(newSocket)
     setSocket(newSocket)
   }
 

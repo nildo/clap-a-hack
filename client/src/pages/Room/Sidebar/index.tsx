@@ -27,9 +27,13 @@ export default function Sidebar() {
     const onChangePresentationTitle = (event: any) => 
         setPresentationTitle(event.target.value);
     const onNewPresentationAdd = () => {
-        socket?.emit('addPresentation', { name: presentationTitle });
-        notification.success({ message: 'Yay!', description: 'New presentation added!' });
-        setPresentationTitle('');
+        if (!presentationTitle?.length)
+            notification.warning({ message: '>:C', description: 'You need to provide a name!' });
+        else {
+            socket?.emit('addPresentation', { name: presentationTitle });
+            notification.success({ message: 'Yay!', description: 'New presentation added!' });
+            setPresentationTitle('');
+        }
     }
     const onShowVotingResults = () => {
         socket?.emit('showResults', { show: !resultsVisible });

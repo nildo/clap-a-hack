@@ -26,13 +26,13 @@ export default function Presentation({ winner }: { winner: string }) {
 
     if (!roomState.resultsVisible)
         return (<Wrapper>
-            <Title level={1}>{presentationTitle}</Title>
+            <Title level={1} style={{ textAlign: 'center' }}>{presentationTitle}</Title>
             <Title level={5}>Share your reactions 🔥</Title>
         </Wrapper>)
     
     return (
         <Wrapper>
-        <Title level={1}>WINNER IS: {winner} 🏆🏆🏆🏆</Title>
+        <Title level={1} style={{ textAlign: 'center' }}>WINNER IS: {winner} 🏆🏆🏆🏆</Title>
         <Title level={5}>Nicely done 🔥</Title>
         </Wrapper>
     )

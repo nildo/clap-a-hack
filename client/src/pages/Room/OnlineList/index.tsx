@@ -16,11 +16,14 @@ const OnlineUser = styled.div<{ userColor: RGBColor }>`
     align-items: flex-start;
     padding: 4px 8px;
     border-radius: 8px;
-    margin: 0 4px;
+    margin: 4px;
     font-weight: bold;
     color: white;
     cursor: pointer;
-    background: ${({ userColor }) => userColor.r ? toRGB(userColor) : toRGB(DEFAULT_COLOR)};
+    background: ${({ userColor }) => {
+        const parsedColor = typeof userColor === 'string' ? JSON.parse(userColor) : userColor;
+        return toRGB(parsedColor);
+    }};
 `;
 
 export default function OnlineList() {
@@ -32,14 +35,28 @@ export default function OnlineList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomState])
 
-    const mappedAdmins = () => roomState?.users
+    const userMenu = (user: any) => (
+        <Menu>
+            <Menu.Item key="0">
+                <Button type="ghost" onClick={() => onChangeAdminClick(user, true)}>Make admin</Button>
+            </Menu.Item>
+        </Menu>
+    )
+    const adminMenu = (user: any) => (
+        <Menu>
+            <Menu.Item key="0">
+                <Button type="ghost" onClick={() => onChangeAdminClick(user, false)}>Remove admin</Button>
+            </Menu.Item>
+        </Menu>
+    )
+
+    const mappedAdmins = roomState?.users
         .filter((user: any) => user.isAdmin)
-        .map((user: any) => 
-            <Dropdown overlay={adminMenu(user)} trigger={['click']} disabled={!isAdmin}>
-                <OnlineUser key={user.id} userColor={user.color || DEFAULT_COLOR}>@{user.user}</OnlineUser>
+        .map((user: any) => <Dropdown overlay={adminMenu(user)} trigger={['click']} disabled={!isAdmin}>
+                <OnlineUser key={user.id} userColor={user.color ?? DEFAULT_COLOR}>@{user.user}</OnlineUser>
             </Dropdown>
     );
-    const mappedUsers = () => roomState?.users
+    const mappedUsers = roomState?.users
         .filter((user: any) => !user.isAdmin)
         .map((user: any) => 
             <Dropdown overlay={userMenu(user)} trigger={['click']} disabled={!isAdmin}>
@@ -61,30 +78,19 @@ export default function OnlineList() {
         }
     }
 
-    const userMenu = (user: any) => (
-        <Menu>
-            <Menu.Item key="0">
-                <Button type="ghost" onClick={() => onChangeAdminClick(user, true)}>Make admin</Button>
-            </Menu.Item>
-        </Menu>
-    )
-    const adminMenu = (user: any) => (
-        <Menu>
-            <Menu.Item key="0">
-                <Button type="ghost" onClick={() => onChangeAdminClick(user, false)}>Remove admin</Button>
-            </Menu.Item>
-        </Menu>
-    )
-
     return (
         <Flex column>
-            <Flex row align style={{ position: 'sticky', justifyContent: 'flex-start', margin: '4px 0' }}>
-                <Title level={5} style={{ margin: 0 }}>Admins:</Title>
-                {mappedAdmins()}
+            <Flex row align style={{ justifyContent: 'flex-start', margin: '4px 0' }}>
+                <Title level={5} style={{ margin: 0, minWidth: '100px' }}>Admins ({mappedAdmins?.length}):</Title>
+                <Flex row align style={{ flexWrap: 'wrap'}}>
+                    {mappedAdmins}
+                </Flex>
             </Flex>
-            <Flex row align style={{ position: 'sticky', justifyContent: 'flex-start', margin: '4px 0' }}>
-                <Title level={5} style={{ margin: 0 }}>Online now:</Title>
-                {mappedUsers()}
+            <Flex row align style={{ justifyContent: 'flex-start', margin: '4px 0' }}>
+                <Title level={5} style={{ margin: 0, minWidth: '100px' }}>Users ({mappedUsers?.length ?? 0}):</Title>
+                <Flex row align style={{ flexWrap: 'wrap'}}>
+                    {mappedUsers}
+                </Flex>
             </Flex>
         </Flex>
     )

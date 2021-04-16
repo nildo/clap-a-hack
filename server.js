@@ -144,6 +144,18 @@ io.on("connection", (client) => {
     io.to(room).emit("stateUpdate", rooms[room]);
   });
 
+  client.on("deletePresentation", (data) => {
+    const { presentationIndex } = data;
+    const presentationsNew = rooms[room].presentations;
+    presentationsNew.splice(presentationIndex, 1);
+    rooms[room] = {
+      ...rooms[room],
+      presentations: presentationsNew,
+      currentPresentation: 0
+    };
+    io.to(room).emit("stateUpdate", rooms[room]);
+  })
+
   client.on("makeAdmin", (data) => {
     const { userToAdmin } = data;
     rooms[room] = {

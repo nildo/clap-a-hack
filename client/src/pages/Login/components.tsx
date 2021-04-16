@@ -14,6 +14,7 @@ export const ColorPickPopover = styled.div`
   position: absolute;
   z-index: 2;
   background-color: white;
+  margin-left: -173px;
 `;
 
 export const ColorPickCover = styled.div`

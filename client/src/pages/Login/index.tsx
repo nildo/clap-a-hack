@@ -19,7 +19,8 @@ const Wrapper = styled.div`
 const Prompt = styled.div`
     display: flex;
     flex-direction: column;
-    min-width: 400px;
+    width: 360px;
+    max-width: 100vw;
 `
 
 
